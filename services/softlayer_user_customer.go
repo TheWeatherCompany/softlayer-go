@@ -25,7 +25,7 @@ func (slucs *softlayer_user_customer_service) GetName() string {
 }
 
 func (slucs *softlayer_user_customer_service) CreateObject(template data_types.SoftLayer_User_Customer, password string) (data_types.SoftLayer_User_Customer, error) {
-	parameters := data_types.SoftLayer_User_Customer_Parameters {
+	parameters := data_types.SoftLayer_User_Customer_Parameters{
 		Parameters: []interface{}{
 			template,
 			password,
@@ -61,6 +61,11 @@ func (slucs *softlayer_user_customer_service) CreateObject(template data_types.S
 	return softLayer_User_Customer, nil
 }
 
+/*
+ * https://api.softlayer.com/rest/v3/SoftLayer_User_Customer/630887.json?objectMask=id;username;\
+       firstname;lastname;email;companyName;address1;address2;city;state;country;timezoneId;\
+       userStatusId;displayName;parentId;permissions;apiAuthenticationKeys
+*/
 func (slucs *softlayer_user_customer_service) GetObject(userid int) (data_types.SoftLayer_User_Customer, error) {
 	objectMask := []string{
 		"id",
@@ -79,6 +84,7 @@ func (slucs *softlayer_user_customer_service) GetObject(userid int) (data_types.
 		"displayName",
 		"parentId",
 		"permissions",
+		"apiAuthenticationKeys",
 	}
 
 	response, errorCode, err := slucs.client.GetHttpClient().DoRawHttpRequestWithObjectMask(fmt.Sprintf("%s/%d/getObject.json", slucs.GetName(), userid), objectMask, "GET", new(bytes.Buffer))
@@ -161,8 +167,11 @@ func (slucs *softlayer_user_customer_service) DeleteObject(userid int) (bool, er
 	return true, err
 }
 
+/*
+ * https://api.softlayer.com/rest/v3/SoftLayer_User_Customer/630887/getApiAuthenticationKeys.json
+ */
 func (slucs *softlayer_user_customer_service) GetApiAuthenticationKeys(userId int) ([]data_types.SoftLayer_User_Customer_ApiAuthentication, error) {
-	path := fmt.Sprintf("%s/%d/%s", slucs.GetName(), userId, "getApiAuthenticationKeys.json")
+	path := fmt.Sprintf("%s/%d/%s.json", slucs.GetName(), userId, "getApiAuthenticationKeys")
 	responseBytes, errorCode, err := slucs.client.GetHttpClient().DoRawHttpRequest(path, "GET", &bytes.Buffer{})
 	if err != nil {
 		errorMessage := fmt.Sprintf(
@@ -194,8 +203,11 @@ func (slucs *softlayer_user_customer_service) GetApiAuthenticationKeys(userId in
 	return apiKeys, nil
 }
 
+/*
+ * https://api.softlayer.com/rest/v3/SoftLayer_User_Customer/630887/addApiAuthenticationKey.json
+ */
 func (slucs *softlayer_user_customer_service) AddApiAuthenticationKey(userId int) error {
-	path := fmt.Sprintf("%s/%d/%s", slucs.GetName(), userId, "addApiAuthenticationKey.json")
+	path := fmt.Sprintf("%s/%d/%s.json", slucs.GetName(), userId, "addApiAuthenticationKey")
 	_, errorCode, err := slucs.client.GetHttpClient().DoRawHttpRequest(path, "GET", &bytes.Buffer{})
 	if err != nil {
 		errorMessage := fmt.Sprintf(
@@ -214,6 +226,33 @@ func (slucs *softlayer_user_customer_service) AddApiAuthenticationKey(userId int
 	}
 
 	return nil
+}
+
+/*
+ * https://api.softlayer.com/rest/v3/SoftLayer_User_Customer/630887/removeApiAuthenticationKey/871423.json
+ */
+func (slucs *softlayer_user_customer_service) RemoveApiAuthenticationKey(userId int, apiKeys []data_types.SoftLayer_User_Customer_ApiAuthentication) (bool, error) {
+	// Even though a whole api auth key structure is passed as input parameter, one softlayer user login can only have one api auth key.
+	// Extract the api auth key id.
+	apiAuthKeyId := apiKeys[0].Id
+	path := fmt.Sprintf("%s/%d/%s/%d.json", slucs.GetName(), userId, "removeApiAuthenticationKey", apiAuthKeyId)
+	response, errorCode, err := slucs.client.GetHttpClient().DoRawHttpRequest(path, "GET", &bytes.Buffer{})
+	if err != nil {
+		errorMessage := fmt.Sprintf("softlayer-go: could not %s, error message: '%s'", path, err.Error())
+		return false, errors.New(errorMessage)
+	}
+
+	if res := string(response[:]); res != "true" {
+		errorMessage := fmt.Sprintf("softlayer-go: could not %s. Response received: '%s'", path, res)
+		return false, errors.New(errorMessage)
+	}
+
+	if common.IsHttpErrorCode(errorCode) {
+		errorMessage := fmt.Sprintf("softlayer-go: could not %s. HTTP error code: '%d'", path, errorCode)
+		return false, errors.New(errorMessage)
+	}
+
+	return true, nil
 }
 
 func (slucs *softlayer_user_customer_service) AddBulkPortalPermission(userId int, permissions []data_types.SoftLayer_User_Customer_CustomerPermission_Permission) error {

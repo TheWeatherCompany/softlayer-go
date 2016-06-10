@@ -7,6 +7,7 @@ type SoftLayer_User_Customer_Parameters struct {
 type SoftLayer_User_Customer struct {
 	Address1    string `json:"address1,omitempty"`
 	Address2    string `json:"address2,omitempty"`
+	ApiAuthenticationKeys []SoftLayer_User_Customer_ApiAuthentication `json:"apiAuthenticationKeys,omitempty"`
 	City        string `json:"city,omitempty"`
 	CompanyName string `json:"companyName,omitempty"`
 	Country     string `json:"country,omitempty"`

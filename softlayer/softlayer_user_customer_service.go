@@ -14,6 +14,8 @@ type SoftLayer_User_Customer_Service interface {
 
 	AddApiAuthenticationKey(userId int) error
 	GetApiAuthenticationKeys(userId int) ([]data_types.SoftLayer_User_Customer_ApiAuthentication, error)
+	RemoveApiAuthenticationKey(userId int, apiKeys []data_types.SoftLayer_User_Customer_ApiAuthentication) (bool, error)
+
 	AddBulkPortalPermission(userId int, permissions []data_types.SoftLayer_User_Customer_CustomerPermission_Permission) error
 	RemoveBulkPortalPermission(userId int, permissions []data_types.SoftLayer_User_Customer_CustomerPermission_Permission) error
 	GetPermissions(userId int) ([]data_types.SoftLayer_User_Customer_CustomerPermission_Permission, error)
