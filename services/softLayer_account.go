@@ -307,6 +307,29 @@ func (slas *softLayer_Account_Service) GetApplicationDeliveryControllersWithFilt
 	return nadc, nil
 }
 
+func (slas *softLayer_Account_Service) GetApplicationDeliveryControllerLoadBalancersWithFilter(filter string) ([]datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer, error) {
+	path := fmt.Sprintf("%s/%s", slas.GetName(), "getAdcLoadBalancers.json")
+
+	responseBytes, errorCode, err := slas.client.GetHttpClient().DoRawHttpRequestWithObjectFilter(path, filter, "GET", &bytes.Buffer{})
+	if err != nil {
+		errorMessage := fmt.Sprintf("softlayer-go: could not get SoftLayer_Account#getAdcLoadBalancersControllersWithFilter, error message '%s'", err.Error())
+		return []datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, errors.New(errorMessage)
+	}
+
+	if common.IsHttpErrorCode(errorCode) {
+		errorMessage := fmt.Sprintf("softlayer-go: could not get SoftLayer_Account#getAdcLoadBalancersControllersWithFilter, HTTP error code: '%d'", errorCode)
+		return []datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, errors.New(errorMessage)
+	}
+
+	nadc := []datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}
+	err = json.Unmarshal(responseBytes, &nadc)
+	if err != nil {
+		return []datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, fmt.Errorf("softlayer-go: failed to decode JSON response, err message '%s'", err.Error())
+	}
+
+	return nadc, nil
+}
+
 func (slas *softLayer_Account_Service) GetVirtualDiskImages() ([]datatypes.SoftLayer_Virtual_Disk_Image, error) {
 	path := fmt.Sprintf("%s/%s", slas.GetName(), "getVirtualDiskImages.json")
 	responseBytes, errorCode, err := slas.client.GetHttpClient().DoRawHttpRequest(path, "GET", &bytes.Buffer{})
