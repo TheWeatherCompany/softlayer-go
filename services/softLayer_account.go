@@ -307,10 +307,10 @@ func (slas *softLayer_Account_Service) GetApplicationDeliveryControllersWithFilt
 	return nadc, nil
 }
 
-func (slas *softLayer_Account_Service) GetApplicationDeliveryControllerLoadBalancersWithFilter(filter string) ([]datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer, error) {
+func (slas *softLayer_Account_Service) GetApplicationDeliveryControllerLoadBalancersWithFilterAndMask(filter string, mask string) ([]datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer, error) {
 	path := fmt.Sprintf("%s/%s", slas.GetName(), "getAdcLoadBalancers.json")
 
-	responseBytes, errorCode, err := slas.client.GetHttpClient().DoRawHttpRequestWithObjectFilter(path, filter, "GET", &bytes.Buffer{})
+	responseBytes, errorCode, err := slas.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s%s&objectFilter=%s", path, mask, filter), "GET", &bytes.Buffer{})
 	if err != nil {
 		errorMessage := fmt.Sprintf("softlayer-go: could not get SoftLayer_Account#getAdcLoadBalancersControllersWithFilter, error message '%s'", err.Error())
 		return []datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, errors.New(errorMessage)
