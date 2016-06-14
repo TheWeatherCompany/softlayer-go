@@ -19,6 +19,7 @@ const (
 	ORDER_TYPE_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER   = "SoftLayer_Container_Product_Order_Network_LoadBalancer"
 	PACKAGE_ID_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER   = 194
 	DATACENTER_TYPE_NAME					   = "SoftLayer_Location_Datacenter"
+	BILLING_ITEM_TYPE_NAME					   = "SoftLayer_Billing_Item"
 	OBJECT_MASK						   = "?objectMask=mask[id,connectionLimit,ipAddressId,securityCertificateId,loadBalancerHardware[datacenter[name]]]"
 )
 
@@ -134,12 +135,7 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 	}
 
 	if billingItem.Id > 0 {
-		billingItemService, err := slnadclbs.client.GetSoftLayer_Billing_Item_Service()
-		if err != nil {
-			return false, err
-		}
-
-		deleted, err := billingItemService.CancelService(billingItem.Id)
+		deleted, err := slnadclbs.CancelService(billingItem.Id)
 		if err != nil {
 			return false, err
 		}
@@ -153,21 +149,36 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 }
 
 func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) CancelService(billingId int) (bool, error) {
-	response, errorCode, err := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/cancelService.json", slnadclbs.GetName(), billingId), "GET", new(bytes.Buffer))
+	stateConf := &resource.StateChangeConf{
+		Pending: []string{fmt.Sprintf("{\"error\":\"This cancellation could not be processed please contact support.This cancellation could not be processed please contact support. Failed to cancel billing items. Failed to cancel billing item #%d. Error: There is currently an active transaction.\",\"code\":\"SoftLayer_Exception_Public\"}", billingId)},
+		Target: []string{"complete"},
+		Refresh: func() (interface{}, string, error) {
+			response, errorCode, error := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/cancelService.json", BILLING_ITEM_TYPE_NAME, billingId), "GET", new(bytes.Buffer))
+
+			if error != nil {
+				return false, "", error
+			} else if errorCode == 500 {
+				return nil, string(response), nil
+			} else {
+				return true, "complete", nil
+			}
+		},
+		Timeout:    10 * time.Minute,
+		Delay:      30 * time.Second,
+		MinTimeout: 30 * time.Second,
+	}
+
+	pendingResult, err := stateConf.WaitForState()
+
 	if err != nil {
 		return false, err
 	}
 
-	if res := string(response[:]); res != "true" {
+	if !bool(pendingResult.(bool)) {
 		return false, nil
 	}
 
-	if common.IsHttpErrorCode(errorCode) {
-		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Billing_Item#CancelService, HTTP error code: '%d'", errorCode)
-		return false, errors.New(errorMessage)
-	}
-
-	return true, err
+	return true, nil
 }
 
 func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) findLoadBalancerByOrderId(orderId int) (datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer, error) {
