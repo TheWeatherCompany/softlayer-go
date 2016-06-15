@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 	"fmt"
+	"log"
 	datatypes "github.com/TheWeatherCompany/softlayer-go/data_types"
 	softlayer "github.com/TheWeatherCompany/softlayer-go/softlayer"
 	"github.com/hashicorp/terraform/helper/resource"
@@ -20,7 +21,7 @@ const (
 	PACKAGE_ID_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER   = 194
 	DATACENTER_TYPE_NAME					   = "SoftLayer_Location_Datacenter"
 	BILLING_ITEM_TYPE_NAME					   = "SoftLayer_Billing_Item"
-	OBJECT_MASK						   = "?objectMask=mask[id,connectionLimit,ipAddressId,securityCertificateId,loadBalancerHardware[datacenter[name]]]"
+	OBJECT_MASK						   = "?objectMask=mask[id,connectionLimit,ipAddressId,securityCertificateId,loadBalancerHardware[datacenter[name]],ipAddress[ipAddress,subnet[networkVlan]],virtualServers[serviceGroups[services[healthChecks,groupReferences]]]]"
 )
 
 type softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service struct {
@@ -76,8 +77,40 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 	return vpx, nil
 }
 
+func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) UpdateLoadBalancer(lbId int, virtualServers []*datatypes.Softlayer_Load_Balancer_Virtual_Server) (bool, error) {
+	lb, err := slnadclbs.GetObject(lbId)
+	if err != nil {
+		return false, err
+	}
+	if lb.Id != lbId {
+		return false, fmt.Errorf("Load balancer with id '%d' is not found", lbId)
+	}
+
+	parameters := datatypes.SoftLayer_Load_Balancer_Update_Parameters{
+		Parameters: []datatypes.Softlayer_Load_Balancer_Virtual_Server_Parameters{{
+			VirtualServers: virtualServers,
+		}},
+	}
+
+	requestBody, err := json.Marshal(parameters)
+	if err != nil {
+		return false, fmt.Errorf("Load balancer with id '%d' is not found: %s", lbId, err)
+	}
+
+	response, errorCode, error := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/%s.json", slnadclbs.GetName(), lbId, "editObject"), "POST", bytes.NewBuffer(requestBody))
+
+	if error != nil {
+		return false, error
+	} else if errorCode != 200 {
+		return false, fmt.Errorf(string(response))
+	}
+
+	return true, nil
+}
+
 func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) GetObject(id int) (datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer, error) {
 	response, errorCode, err := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/getObject.json%s", slnadclbs.GetName(), id, OBJECT_MASK), "GET", new(bytes.Buffer))
+
 	if err != nil {
 		errorMessage := fmt.Sprintf("softlayer-go: could not perform SoftLayer_Network_Application_Delivery_Controller_Load_Balancer#getObject, error message '%s'", err.Error())
 		return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, errors.New(errorMessage)
