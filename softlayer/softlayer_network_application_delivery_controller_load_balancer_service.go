@@ -13,6 +13,7 @@ type SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service int
 	Service
 
 	CreateLoadBalancer(createOptions *SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service_CreateOptions) (datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer, error)
+	UpdateLoadBalancer(lbId int, createOptions []*datatypes.Softlayer_Load_Balancer_Virtual_Server) (bool, error)
 
         GetObject(id int) (datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer, error)
 
