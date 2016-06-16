@@ -105,9 +105,9 @@ func (slpo *softLayer_Product_Order_Service) PlaceContainerOrderApplicationDeliv
 	return slpo.placeOrder(parameters)
 }
 
-func (slpo *softLayer_Product_Order_Service) PlaceContainerOrderApplicationDeliveryControllerLoadBalancer(order datatypes.SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller_Load_Balancer) (datatypes.SoftLayer_Container_Product_Order_Receipt, error) {
-	parameters := datatypes.SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller_Load_Balancer_Parameters{
-		Parameters: []datatypes.SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller_Load_Balancer{
+func (slpo *softLayer_Product_Order_Service) PlaceContainerOrderLoadBalancer(order datatypes.SoftLayer_Container_Product_Order_Load_Balancer) (datatypes.SoftLayer_Container_Product_Order_Receipt, error) {
+	parameters := datatypes.SoftLayer_Container_Product_Order_Load_Balancer_Parameters{
+		Parameters: []datatypes.SoftLayer_Container_Product_Order_Load_Balancer{
 			order,
 		},
 	}

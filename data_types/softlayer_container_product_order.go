@@ -20,8 +20,8 @@ type SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller_P
 	Parameters []SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller `json:"parameters"`
 }
 
-type SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller_Load_Balancer_Parameters struct {
-	Parameters []SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller_Load_Balancer `json:"parameters"`
+type SoftLayer_Container_Product_Order_Load_Balancer_Parameters struct {
+	Parameters []SoftLayer_Container_Product_Order_Load_Balancer `json:"parameters"`
 }
 
 //http://sldn.softlayer.com/reference/datatypes/SoftLayer_Container_Product_Order
@@ -68,7 +68,7 @@ type SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller s
 	Quantity    int                            `json:"quantity,omitempty"`
 }
 
-type SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller_Load_Balancer struct {
+type SoftLayer_Container_Product_Order_Load_Balancer struct {
 	ComplexType string                         `json:"complexType"`
 	Location    int                            `json:"location,omitempty"`
 	PackageId   int                            `json:"packageId"`

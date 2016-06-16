@@ -3,7 +3,6 @@ package services
 import (
 	"errors"
 	"fmt"
-	"log"
 	datatypes "github.com/TheWeatherCompany/softlayer-go/data_types"
 	softlayer "github.com/TheWeatherCompany/softlayer-go/softlayer"
 	"github.com/hashicorp/terraform/helper/resource"
@@ -21,42 +20,42 @@ const (
 	PACKAGE_ID_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER   = 194
 	DATACENTER_TYPE_NAME					   = "SoftLayer_Location_Datacenter"
 	BILLING_ITEM_TYPE_NAME					   = "SoftLayer_Billing_Item"
-	OBJECT_MASK						   = "?objectMask=mask[id,connectionLimit,ipAddressId,securityCertificateId,loadBalancerHardware[datacenter[name]],ipAddress[ipAddress,subnet[networkVlan]],virtualServers[serviceGroups[services[healthChecks,groupReferences]]]]"
+	OBJECT_MASK						   = "?objectMask=mask[id,connectionLimit,ipAddressId,securityCertificateId,highAvailabilityFlag,sslEnabledFlag,loadBalancerHardware[datacenter[name]],ipAddress[ipAddress,subnet[networkVlan]],virtualServers[serviceGroups[services[healthChecks,groupReferences]]]]"
 )
 
-type softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service struct {
+type softLayer_Load_Balancer struct {
 	client softlayer.Client
 }
 
-func NewSoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service(client softlayer.Client) *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service {
-	return &softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service{
+func NewSoftLayer_Load_Balancer(client softlayer.Client) *softLayer_Load_Balancer {
+	return &softLayer_Load_Balancer{
 		client: client,
 	}
 }
 
-func (slnadcs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) GetName() string {
+func (slnadcs *softLayer_Load_Balancer) GetName() string {
 	return "SoftLayer_Network_Application_Delivery_Controller_LoadBalancer_VirtualIpAddress"
 }
 
-func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) CreateLoadBalancer(createOptions *softlayer.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service_CreateOptions) (datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer, error) {
+func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancer(createOptions *softlayer.SoftLayer_Load_Balancer_CreateOptions) (datatypes.SoftLayer_Load_Balancer, error) {
 
 	orderService, err := slnadclbs.client.GetSoftLayer_Product_Order_Service()
 	if err != nil {
-		return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, err
+		return datatypes.SoftLayer_Load_Balancer{}, err
 	}
 
 	items, err := slnadclbs.FindCreatePriceItems(createOptions)
 	if err != nil {
-		return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, err
+		return datatypes.SoftLayer_Load_Balancer{}, err
 	}
 
 	location, err := slnadclbs.getDatacenterByName(createOptions.Location)
 
 	if err != nil {
-		return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, err
+		return datatypes.SoftLayer_Load_Balancer{}, err
 	}
 
-	order := datatypes.SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller_Load_Balancer{
+	order := datatypes.SoftLayer_Container_Product_Order_Load_Balancer{
 		PackageId:   PACKAGE_ID_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER,
 		ComplexType: ORDER_TYPE_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER,
 		Location:    location,
@@ -64,20 +63,20 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 		Quantity:    1,
 	}
 
-	receipt, err := orderService.PlaceContainerOrderApplicationDeliveryControllerLoadBalancer(order)
+	receipt, err := orderService.PlaceContainerOrderLoadBalancer(order)
 	if err != nil {
-		return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, err
+		return datatypes.SoftLayer_Load_Balancer{}, err
 	}
 
 	vpx, err := slnadclbs.findLoadBalancerByOrderId(receipt.OrderId)
 	if err != nil {
-		return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, err
+		return datatypes.SoftLayer_Load_Balancer{}, err
 	}
 
 	return vpx, nil
 }
 
-func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) UpdateLoadBalancer(lbId int, virtualServers []*datatypes.Softlayer_Load_Balancer_Virtual_Server) (bool, error) {
+func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancer(lbId int, virtualServers []*datatypes.Softlayer_Load_Balancer_Virtual_Server) (bool, error) {
 	lb, err := slnadclbs.GetObject(lbId)
 	if err != nil {
 		return false, err
@@ -108,35 +107,35 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 	return true, nil
 }
 
-func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) GetObject(id int) (datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer, error) {
+func (slnadclbs *softLayer_Load_Balancer) GetObject(id int) (datatypes.SoftLayer_Load_Balancer, error) {
 	response, errorCode, err := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/getObject.json%s", slnadclbs.GetName(), id, OBJECT_MASK), "GET", new(bytes.Buffer))
 
 	if err != nil {
-		errorMessage := fmt.Sprintf("softlayer-go: could not perform SoftLayer_Network_Application_Delivery_Controller_Load_Balancer#getObject, error message '%s'", err.Error())
-		return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, errors.New(errorMessage)
+		errorMessage := fmt.Sprintf("softlayer-go: could not perform SoftLayer_Load_Balancer#getObject, error message '%s'", err.Error())
+		return datatypes.SoftLayer_Load_Balancer{}, errors.New(errorMessage)
 	}
 
 	if common.IsHttpErrorCode(errorCode) {
-		errorMessage := fmt.Sprintf("softlayer-go: could not perform SoftLayer_Network_Application_Delivery_Controller_Load_Balancer#getObject, HTTP error code: '%d'", errorCode)
-		return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, errors.New(errorMessage)
+		errorMessage := fmt.Sprintf("softlayer-go: could not perform SoftLayer_Load_Balancer#getObject, HTTP error code: '%d'", errorCode)
+		return datatypes.SoftLayer_Load_Balancer{}, errors.New(errorMessage)
 	}
 
-	lb := datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}
+	lb := datatypes.SoftLayer_Load_Balancer{}
 	err = json.Unmarshal(response, &lb)
 	if err != nil {
-		return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, err
+		return datatypes.SoftLayer_Load_Balancer{}, err
 	}
 
 	return lb, nil
 }
 
-func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) FindCreatePriceItems(createOptions *softlayer.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service_CreateOptions) ([]datatypes.SoftLayer_Product_Item_Price, error) {
+func (slnadclbs *softLayer_Load_Balancer) FindCreatePriceItems(createOptions *softlayer.SoftLayer_Load_Balancer_CreateOptions) ([]datatypes.SoftLayer_Product_Item_Price, error) {
 	items, err := slnadclbs.getApplicationDeliveryControllerLoadBalancerItems()
 	if err != nil {
 		return []datatypes.SoftLayer_Product_Item_Price{}, err
 	}
 
-	lbKey := slnadclbs.getLoadBalancerPriceItemKeyName(createOptions.Connections)
+	lbKey := slnadclbs.getLoadBalancerPriceItemKeyName(createOptions.Connections, createOptions.HaEnabled)
 
 	var lbItemPrice datatypes.SoftLayer_Product_Item_Price
 
@@ -161,7 +160,7 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 	return []datatypes.SoftLayer_Product_Item_Price{lbItemPrice}, nil
 }
 
-func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) DeleteObject(id int) (bool, error) {
+func (slnadclbs *softLayer_Load_Balancer) DeleteObject(id int) (bool, error) {
 	billingItem, err := slnadclbs.GetBillingItem(id)
 	if err != nil {
 		return false, err
@@ -181,7 +180,7 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 	return true, fmt.Errorf("softlayer-go: could not SoftLayer_Network_Application_Delivery_Controller_LoadBalancer_VirtualIpAddress#deleteLoadBalancer with id: '%d'", id)
 }
 
-func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) CancelService(billingId int) (bool, error) {
+func (slnadclbs *softLayer_Load_Balancer) CancelService(billingId int) (bool, error) {
 	stateConf := &resource.StateChangeConf{
 		Pending: []string{fmt.Sprintf("{\"error\":\"This cancellation could not be processed please contact support.This cancellation could not be processed please contact support. Failed to cancel billing items. Failed to cancel billing item #%d. Error: There is currently an active transaction.\",\"code\":\"SoftLayer_Exception_Public\"}", billingId)},
 		Target: []string{"complete"},
@@ -214,7 +213,7 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 	return true, nil
 }
 
-func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) findLoadBalancerByOrderId(orderId int) (datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer, error) {
+func (slnadclbs *softLayer_Load_Balancer) findLoadBalancerByOrderId(orderId int) (datatypes.SoftLayer_Load_Balancer, error) {
 	ObjectFilter := string(`{"adcLoadBalancers":{"dedicatedBillingItem":{"orderItem":{"order":{"id":{"operation":` + strconv.Itoa(orderId) + `}}}}}}`)
 
 	stateConf := &resource.StateChangeConf{
@@ -223,11 +222,11 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 		Refresh: func() (interface{}, string, error) {
 			accountService, err := slnadclbs.client.GetSoftLayer_Account_Service()
 			if err != nil {
-				return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, "", err
+				return datatypes.SoftLayer_Load_Balancer{}, "", err
 			}
 			lbs, err := accountService.GetApplicationDeliveryControllerLoadBalancersWithFilterAndMask(ObjectFilter, OBJECT_MASK)
 			if err != nil {
-				return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, "", err
+				return datatypes.SoftLayer_Load_Balancer{}, "", err
 			}
 
 			if len(lbs) == 1 {
@@ -246,20 +245,20 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 	pendingResult, err := stateConf.WaitForState()
 
 	if err != nil {
-		return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{}, err
+		return datatypes.SoftLayer_Load_Balancer{}, err
 	}
 
-	var result, ok = pendingResult.(datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer)
+	var result, ok = pendingResult.(datatypes.SoftLayer_Load_Balancer)
 
 	if ok {
 		return result, nil
 	}
 
-	return datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer{},
+	return datatypes.SoftLayer_Load_Balancer{},
 		fmt.Errorf("Cannot find Application Delivery Controller Load Balancer with order id '%d'", orderId)
 }
 
-func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) getApplicationDeliveryControllerLoadBalancerItems() ([]datatypes.SoftLayer_Product_Item, error) {
+func (slnadclbs *softLayer_Load_Balancer) getApplicationDeliveryControllerLoadBalancerItems() ([]datatypes.SoftLayer_Product_Item, error) {
 	productPackageService, err := slnadclbs.client.GetSoftLayer_Product_Package_Service()
 	if err != nil {
 		return []datatypes.SoftLayer_Product_Item{}, err
@@ -268,12 +267,17 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 	return productPackageService.GetItemsByType(PACKAGE_TYPE_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER)
 }
 
-func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) getLoadBalancerPriceItemKeyName(connections int) string {
+func (slnadclbs *softLayer_Load_Balancer) getLoadBalancerPriceItemKeyName(connections int, haEnabled bool) string {
 	name := "DEDICATED_LOAD_BALANCER_WITH_HIGH_AVAILABILITY_AND_SSL"
+
+	if !haEnabled {
+		name = "LOAD_BALANCER_DEDICATED_WITH_SSL_OFFLOAD"
+	}
+
 	return strings.Join([]string{name, strconv.Itoa(connections), "CONNECTIONS"}, DELIMITER)
 }
 
-func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) getDatacenterByName(name string) (int, error) {
+func (slnadclbs *softLayer_Load_Balancer) getDatacenterByName(name string) (int, error) {
 	response, errorCode, err := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/getDatacenters.json", DATACENTER_TYPE_NAME), "GET", new(bytes.Buffer))
 	if err != nil {
 		return -1, err
@@ -299,7 +303,7 @@ func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer
 	return -1, nil
 }
 
-func (slnadclbs *softLayer_Network_Application_Delivery_Controller_Load_Balancer_Service) GetBillingItem(id int) (datatypes.SoftLayer_Billing_Item, error) {
+func (slnadclbs *softLayer_Load_Balancer) GetBillingItem(id int) (datatypes.SoftLayer_Billing_Item, error) {
 
 	response, errorCode, err := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/getDedicatedBillingItem.json", slnadclbs.GetName(), id), "GET", new(bytes.Buffer))
 	if err != nil {

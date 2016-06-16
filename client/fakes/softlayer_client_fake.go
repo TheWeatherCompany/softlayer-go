@@ -213,13 +213,13 @@ func (fslc *FakeSoftLayerClient) GetSoftLayer_Security_Certificate_Service() (so
 	return slService.(softlayer.SoftLayer_Security_Certificate_Service), nil
 }
 
-func (slc *FakeSoftLayerClient) GetSoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service() (softlayer.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service, error) {
-	slService, err := slc.GetService("SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service")
+func (slc *FakeSoftLayerClient) GetSoftLayer_Load_Balancer_Service() (softlayer.SoftLayer_Load_Balancer_Service, error) {
+	slService, err := slc.GetService("SoftLayer_Load_Balancer_Service")
 	if err != nil {
 		return nil, err
 	}
 
-	return slService.(softlayer.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service), nil
+	return slService.(softlayer.SoftLayer_Load_Balancer_Service), nil
 }
 
 //Public methods

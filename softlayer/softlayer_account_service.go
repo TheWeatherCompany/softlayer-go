@@ -23,5 +23,5 @@ type SoftLayer_Account_Service interface {
 	GetDatacentersWithSubnetAllocations() ([]datatypes.SoftLayer_Location, error)
 	GetHardware() ([]datatypes.SoftLayer_Hardware, error)
 	GetApplicationDeliveryControllersWithFilter(filter string) ([]datatypes.SoftLayer_Network_Application_Delivery_Controller, error)
-	GetApplicationDeliveryControllerLoadBalancersWithFilterAndMask(filter string, mask string) ([]datatypes.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer, error)
+	GetApplicationDeliveryControllerLoadBalancersWithFilterAndMask(filter string, mask string) ([]datatypes.SoftLayer_Load_Balancer, error)
 }

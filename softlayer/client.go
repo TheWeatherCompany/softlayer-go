@@ -24,7 +24,7 @@ type Client interface {
 	GetSoftLayer_Network_Application_Delivery_Controller_Service() (SoftLayer_Network_Application_Delivery_Controller_Service, error)
 	GetSoftLayer_Dns_Domain_ResourceRecord_Service() (SoftLayer_Dns_Domain_ResourceRecord_Service, error)
 	GetSoftLayer_Security_Certificate_Service() (SoftLayer_Security_Certificate_Service, error)
-	GetSoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service() (SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service, error)
+	GetSoftLayer_Load_Balancer_Service() (SoftLayer_Load_Balancer_Service, error)
 
 	GetHttpClient() HttpClient
 }

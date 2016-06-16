@@ -210,13 +210,13 @@ func (slc *SoftLayerClient) GetSoftLayer_Security_Certificate_Service() (softlay
 	return slService.(softlayer.SoftLayer_Security_Certificate_Service), nil
 }
 
-func (slc *SoftLayerClient) GetSoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service() (softlayer.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service, error) {
-	slService, err := slc.GetService("SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service")
+func (slc *SoftLayerClient) GetSoftLayer_Load_Balancer_Service() (softlayer.SoftLayer_Load_Balancer_Service, error) {
+	slService, err := slc.GetService("SoftLayer_Load_Balancer_Service")
 	if err != nil {
 		return nil, err
 	}
 
-	return slService.(softlayer.SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service), nil
+	return slService.(softlayer.SoftLayer_Load_Balancer_Service), nil
 }
 
 //Public methods
@@ -285,7 +285,7 @@ func (slc *SoftLayerClient) initSoftLayerServices() {
 	slc.softLayerServices["SoftLayer_Network_Application_Delivery_Controller_Service"] = services.NewSoftLayer_Network_Application_Delivery_Controller_Service(slc)
 	slc.softLayerServices["SoftLayer_Security_Certificate"] = services.NewSoftLayer_Security_Certificate_Service(slc)
 	slc.softLayerServices["SoftLayer_User_Customer"] = services.NewSoftLayer_User_Customer_Service(slc)
-	slc.softLayerServices["SoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service"] = services.NewSoftLayer_Network_Application_Delivery_Controller_Load_Balancer_Service(slc)
+	slc.softLayerServices["SoftLayer_Load_Balancer_Service"] = services.NewSoftLayer_Load_Balancer(slc)
 }
 
 func (slc *SoftLayerClient) makeHttpRequest(url string, requestType string, requestBody *bytes.Buffer) ([]byte, error) {
