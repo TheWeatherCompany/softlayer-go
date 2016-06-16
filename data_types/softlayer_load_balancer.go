@@ -1,5 +1,13 @@
 package data_types
 
+type SoftLayer_Load_Balancer_Update_Parameters struct {
+	Parameters []SoftLayer_Load_Balancer_Update `json:"parameters"`
+}
+
+type SoftLayer_Load_Balancer_Update struct {
+	SecurityCertificateId *int `json:"securityCertificateId"`
+}
+
 type SoftLayer_Load_Balancer struct {
 	Id                    int                                       `json:"id,omitempty"`
 	ConnectionLimit       int                                       `json:"connectionLimit,omitempty"`

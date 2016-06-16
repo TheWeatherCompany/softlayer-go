@@ -76,19 +76,27 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancer(createOptions *soft
 	return vpx, nil
 }
 
-func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancer(lbId int, virtualServers []*datatypes.Softlayer_Load_Balancer_Virtual_Server) (bool, error) {
-	lb, err := slnadclbs.GetObject(lbId)
+func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancer(lbId int, lb *datatypes.SoftLayer_Load_Balancer_Update) (bool, error) {
+	object, err := slnadclbs.GetObject(lbId)
 	if err != nil {
 		return false, err
 	}
-	if lb.Id != lbId {
+	if object.Id != lbId {
 		return false, fmt.Errorf("Load balancer with id '%d' is not found", lbId)
 	}
 
 	parameters := datatypes.SoftLayer_Load_Balancer_Update_Parameters{
-		Parameters: []datatypes.Softlayer_Load_Balancer_Virtual_Server_Parameters{{
-			VirtualServers: virtualServers,
+		Parameters: []datatypes.SoftLayer_Load_Balancer_Update{{
+			SecurityCertificateId: lb.SecurityCertificateId,
 		}},
+	}
+
+	if *lb.SecurityCertificateId == 0 {
+		parameters = datatypes.SoftLayer_Load_Balancer_Update_Parameters{
+			Parameters: []datatypes.SoftLayer_Load_Balancer_Update{{
+				SecurityCertificateId: nil,
+			}},
+		}
 	}
 
 	requestBody, err := json.Marshal(parameters)
