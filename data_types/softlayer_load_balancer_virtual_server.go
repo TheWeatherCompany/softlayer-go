@@ -1,5 +1,9 @@
 package data_types
 
+type SoftLayer_Load_Balancer_Virtual_Server_Update_Parameters struct {
+	Parameters []Softlayer_Load_Balancer_Virtual_Server_Parameters `json:"parameters"`
+}
+
 type Softlayer_Load_Balancer_Virtual_Server_Parameters struct {
 	VirtualServers []*Softlayer_Load_Balancer_Virtual_Server `json:"virtualServers"`
 }
