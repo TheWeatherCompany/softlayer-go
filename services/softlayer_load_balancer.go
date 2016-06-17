@@ -18,7 +18,7 @@ const (
 	PACKAGE_TYPE_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER = "ADDITIONAL_SERVICES_LOAD_BALANCER"
 	ORDER_TYPE_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER   = "SoftLayer_Container_Product_Order_Network_LoadBalancer"
 	PACKAGE_ID_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER   = 194
-	DATACENTER_TYPE_NAME                                       = "SoftLayer_Location_Datacenter"
+	LOAD_BALANCER_VIRTUAL_SERVER_NAME                          = "SoftLayer_Network_Application_Delivery_Controller_LoadBalancer_VirtualServer"
 	BILLING_ITEM_TYPE_NAME                                     = "SoftLayer_Billing_Item"
 	OBJECT_MASK                                                = "?objectMask=mask[id,connectionLimit,ipAddressId,securityCertificateId,highAvailabilityFlag,sslEnabledFlag,loadBalancerHardware[datacenter[name]],ipAddress[ipAddress,subnet[networkVlan]],virtualServers[serviceGroups[services[healthChecks,groupReferences]]]]"
 )
@@ -217,6 +217,22 @@ func (slnadclbs *softLayer_Load_Balancer) DeleteObject(id int) (bool, error) {
 	}
 
 	return true, fmt.Errorf("softlayer-go: could not SoftLayer_Network_Application_Delivery_Controller_LoadBalancer_VirtualIpAddress#deleteLoadBalancer with id: '%d'", id)
+}
+
+func (slnadclbs *softLayer_Load_Balancer) DeleteLoadBalancerVirtualServer(id int) (bool, error) {
+	_, errorCode, err := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/deleteObject.json", LOAD_BALANCER_VIRTUAL_SERVER_NAME, id), "GET", new(bytes.Buffer))
+
+	if err != nil {
+		errorMessage := fmt.Sprintf("softlayer-go: could not perform SoftLayer_Network_Application_Delivery_Controller_LoadBalancer_VirtualServer#deleteObject, error message '%s'", err.Error())
+		return false, errors.New(errorMessage)
+	}
+
+	if common.IsHttpErrorCode(errorCode) {
+		errorMessage := fmt.Sprintf("softlayer-go: could not perform SoftLayer_Network_Application_Delivery_Controller_LoadBalancer_VirtualServer#deleteObject, HTTP error code: '%d'", errorCode)
+		return false, errors.New(errorMessage)
+	}
+
+	return true, nil
 }
 
 func (slnadclbs *softLayer_Load_Balancer) CancelService(billingId int) (bool, error) {
