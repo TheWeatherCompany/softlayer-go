@@ -10,8 +10,8 @@ type Softlayer_Load_Balancer_Virtual_Server_Parameters struct {
 
 type Softlayer_Load_Balancer_Virtual_Server struct {
 	Id            int                        `json:"id,omitempty"`
-	Allocation    int		         `json:"allocation"`
-	Port          int		         `json:"port"`
+	Allocation    int                        `json:"allocation"`
+	Port          int                        `json:"port"`
 	ServiceGroups []*Softlayer_Service_Group `json:"serviceGroups"`
 }
 
@@ -24,9 +24,9 @@ type Softlayer_Service_Group struct {
 
 type Softlayer_Service struct {
 	Id              int                          `json:"id,omitempty"`
-	Enabled         int		             `json:"enabled"`
-	Port            int		             `json:"port"`
-	IpAddressId     int		             `json:"ipAddressId"`
+	Enabled         int                          `json:"enabled"`
+	Port            int                          `json:"port"`
+	IpAddressId     int                          `json:"ipAddressId"`
 	HealthChecks    []*Softlayer_Health_Check    `json:"healthChecks"`
 	GroupReferences []*Softlayer_Group_Reference `json:"groupReferences"`
 }

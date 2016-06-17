@@ -1,26 +1,26 @@
 package services
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/TheWeatherCompany/softlayer-go/common"
 	datatypes "github.com/TheWeatherCompany/softlayer-go/data_types"
 	softlayer "github.com/TheWeatherCompany/softlayer-go/softlayer"
 	"github.com/hashicorp/terraform/helper/resource"
 	"strconv"
 	"strings"
 	"time"
-	"bytes"
-	"github.com/TheWeatherCompany/softlayer-go/common"
-	"encoding/json"
 )
 
 const (
 	PACKAGE_TYPE_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER = "ADDITIONAL_SERVICES_LOAD_BALANCER"
 	ORDER_TYPE_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER   = "SoftLayer_Container_Product_Order_Network_LoadBalancer"
 	PACKAGE_ID_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER   = 194
-	DATACENTER_TYPE_NAME					   = "SoftLayer_Location_Datacenter"
-	BILLING_ITEM_TYPE_NAME					   = "SoftLayer_Billing_Item"
-	OBJECT_MASK						   = "?objectMask=mask[id,connectionLimit,ipAddressId,securityCertificateId,highAvailabilityFlag,sslEnabledFlag,loadBalancerHardware[datacenter[name]],ipAddress[ipAddress,subnet[networkVlan]],virtualServers[serviceGroups[services[healthChecks,groupReferences]]]]"
+	DATACENTER_TYPE_NAME                                       = "SoftLayer_Location_Datacenter"
+	BILLING_ITEM_TYPE_NAME                                     = "SoftLayer_Billing_Item"
+	OBJECT_MASK                                                = "?objectMask=mask[id,connectionLimit,ipAddressId,securityCertificateId,highAvailabilityFlag,sslEnabledFlag,loadBalancerHardware[datacenter[name]],ipAddress[ipAddress,subnet[networkVlan]],virtualServers[serviceGroups[services[healthChecks,groupReferences]]]]"
 )
 
 type softLayer_Load_Balancer struct {
@@ -49,7 +49,7 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancer(createOptions *soft
 		return datatypes.SoftLayer_Load_Balancer{}, err
 	}
 
-	location, err := slnadclbs.getDatacenterByName(createOptions.Location)
+	location, err := common.GetDatacenterByName(slnadclbs.client, createOptions.Location)
 
 	if err != nil {
 		return datatypes.SoftLayer_Load_Balancer{}, err
@@ -82,10 +82,10 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerVirtualServer(lbId i
 		Parameters: []datatypes.Softlayer_Load_Balancer_Virtual_Server_Parameters{{
 			VirtualServers: []*datatypes.Softlayer_Load_Balancer_Virtual_Server{{
 				Allocation: createOptions.Allocation,
-				Port: createOptions.Port,
+				Port:       createOptions.Port,
 				ServiceGroups: []*datatypes.Softlayer_Service_Group{{
 					RoutingMethodId: createOptions.RoutingMethodId,
-					RoutingTypeId: createOptions.RoutingTypeId,
+					RoutingTypeId:   createOptions.RoutingTypeId,
 				}},
 			}},
 		}},
@@ -222,7 +222,7 @@ func (slnadclbs *softLayer_Load_Balancer) DeleteObject(id int) (bool, error) {
 func (slnadclbs *softLayer_Load_Balancer) CancelService(billingId int) (bool, error) {
 	stateConf := &resource.StateChangeConf{
 		Pending: []string{fmt.Sprintf("{\"error\":\"This cancellation could not be processed please contact support.This cancellation could not be processed please contact support. Failed to cancel billing items. Failed to cancel billing item #%d. Error: There is currently an active transaction.\",\"code\":\"SoftLayer_Exception_Public\"}", billingId)},
-		Target: []string{"complete"},
+		Target:  []string{"complete"},
 		Refresh: func() (interface{}, string, error) {
 			response, errorCode, error := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/cancelService.json", BILLING_ITEM_TYPE_NAME, billingId), "GET", new(bytes.Buffer))
 
@@ -314,32 +314,6 @@ func (slnadclbs *softLayer_Load_Balancer) getLoadBalancerPriceItemKeyName(connec
 	}
 
 	return strings.Join([]string{name, strconv.Itoa(connections), "CONNECTIONS"}, DELIMITER)
-}
-
-func (slnadclbs *softLayer_Load_Balancer) getDatacenterByName(name string) (int, error) {
-	response, errorCode, err := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/getDatacenters.json", DATACENTER_TYPE_NAME), "GET", new(bytes.Buffer))
-	if err != nil {
-		return -1, err
-	}
-
-	if common.IsHttpErrorCode(errorCode) {
-		errorMessage := fmt.Sprintf("softlayer-go: could not retrieve datacenters, HTTP error code: '%d'", errorCode)
-		return -1, errors.New(errorMessage)
-	}
-
-	locations := []datatypes.SoftLayer_Location{}
-	err = json.Unmarshal(response, &locations)
-	if err != nil {
-		return -1, err
-	}
-
-	for _, location := range locations {
-		if location.Name == name {
-			return location.Id, nil
-		}
-	}
-
-	return -1, nil
 }
 
 func (slnadclbs *softLayer_Load_Balancer) GetBillingItem(id int) (datatypes.SoftLayer_Billing_Item, error) {
