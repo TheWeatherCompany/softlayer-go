@@ -113,11 +113,15 @@ type NetworkVlan struct {
 type PrimaryNetworkComponent struct {
 	//Required
 	NetworkVlan NetworkVlan `json:"networkVlan,omitempty"`
+
+	PrimaryIpAddressRecord *SoftLayer_Network_Subnet_IpAddress `json:"primaryIpAddressRecord,omitempty"`
 }
 
 type PrimaryBackendNetworkComponent struct {
 	//Required
 	NetworkVlan NetworkVlan `json:"networkVlan,omitempty"`
+
+	PrimaryIpAddressRecord *SoftLayer_Network_Subnet_IpAddress `json:"primaryIpAddressRecord,omitempty"`
 }
 
 type DiskImage struct {
@@ -147,4 +151,12 @@ type SoftLayer_Virtual_Guest_SetTags_Parameters struct {
 
 type Image_Template_Config struct {
 	ImageTemplateId string `json:"imageTemplateId"`
+}
+
+type SoftLayer_Network_Subnet_IpAddress struct {
+	GuestNetworkComponentBinding *SoftLayer_Virtual_Guest_Network_Component_IpAddress `json:"guestNetworkComponentBinding,omitempty"`
+}
+
+type SoftLayer_Virtual_Guest_Network_Component_IpAddress struct {
+	IpAddressId int `json:"ipAddressId,omitempty"`
 }

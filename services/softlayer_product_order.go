@@ -105,6 +105,15 @@ func (slpo *softLayer_Product_Order_Service) PlaceContainerOrderApplicationDeliv
 	return slpo.placeOrder(parameters)
 }
 
+func (slpo *softLayer_Product_Order_Service) PlaceContainerOrderLoadBalancer(order datatypes.SoftLayer_Container_Product_Order_Load_Balancer) (datatypes.SoftLayer_Container_Product_Order_Receipt, error) {
+	parameters := datatypes.SoftLayer_Container_Product_Order_Load_Balancer_Parameters{
+		Parameters: []datatypes.SoftLayer_Container_Product_Order_Load_Balancer{
+			order,
+		},
+	}
+	return slpo.placeOrder(parameters)
+}
+
 // Private methods
 
 func (slpo *softLayer_Product_Order_Service) placeOrder(parameters interface{}) (datatypes.SoftLayer_Container_Product_Order_Receipt, error) {

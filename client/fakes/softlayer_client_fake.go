@@ -213,6 +213,15 @@ func (fslc *FakeSoftLayerClient) GetSoftLayer_Security_Certificate_Service() (so
 	return slService.(softlayer.SoftLayer_Security_Certificate_Service), nil
 }
 
+func (slc *FakeSoftLayerClient) GetSoftLayer_Load_Balancer_Service() (softlayer.SoftLayer_Load_Balancer_Service, error) {
+	slService, err := slc.GetService("SoftLayer_Load_Balancer_Service")
+	if err != nil {
+		return nil, err
+	}
+
+	return slService.(softlayer.SoftLayer_Load_Balancer_Service), nil
+}
+
 //Public methods
 func (fslc *FakeSoftLayerClient) DoRawHttpRequestWithObjectMask(path string, masks []string, requestType string, requestBody *bytes.Buffer) ([]byte, error) {
 	fslc.DoRawHttpRequestPath = path
