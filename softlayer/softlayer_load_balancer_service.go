@@ -41,6 +41,7 @@ type SoftLayer_Load_Balancer_Service interface {
 
 	DeleteObject(id int) (bool, error)
 	DeleteLoadBalancerVirtualServer(id int) (bool, error)
+	DeleteLoadBalancerService(id int) (bool, error)
 
 	FindCreatePriceItems(createOptions *SoftLayer_Load_Balancer_CreateOptions) ([]datatypes.SoftLayer_Product_Item_Price, error)
 }
