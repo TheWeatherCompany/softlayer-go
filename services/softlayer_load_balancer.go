@@ -108,6 +108,39 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerVirtualServer(lbId i
 	return true, nil
 }
 
+func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancerVirtualServer(lbId int, updateOptions *datatypes.Softlayer_Load_Balancer_Virtual_Server) (bool, error) {
+	parameters := datatypes.SoftLayer_Load_Balancer_Virtual_Server_Update_Parameters{
+		Parameters: []datatypes.Softlayer_Load_Balancer_Virtual_Server_Parameters{{
+			VirtualServers: []*datatypes.Softlayer_Load_Balancer_Virtual_Server{{
+				Id:         updateOptions.Id,
+				Allocation: updateOptions.Allocation,
+				Port:       updateOptions.Port,
+				ServiceGroups: []*datatypes.Softlayer_Service_Group{{
+					Id:              updateOptions.ServiceGroups[0].Id,
+					RoutingMethodId: updateOptions.ServiceGroups[0].RoutingMethodId,
+					RoutingTypeId:   updateOptions.ServiceGroups[0].RoutingTypeId,
+					Services:        []*datatypes.Softlayer_Service{},
+				}},
+			}},
+		}},
+	}
+
+	requestBody, err := json.Marshal(parameters)
+	if err != nil {
+		return false, fmt.Errorf("Load balancer with id '%d' is not found: %s", lbId, err)
+	}
+
+	response, errorCode, error := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/%s.json", slnadclbs.GetName(), lbId, "editObject"), "POST", bytes.NewBuffer(requestBody))
+
+	if error != nil {
+		return false, error
+	} else if errorCode != 200 {
+		return false, fmt.Errorf(string(response))
+	}
+
+	return true, nil
+}
+
 func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerService(lbId int, createOptions *softlayer.SoftLayer_Load_Balancer_Service_CreateOptions) (bool, error) {
 
 	parameters := datatypes.SoftLayer_Load_Balancer_Virtual_Server_Update_Parameters{

@@ -34,6 +34,7 @@ type SoftLayer_Load_Balancer_Service interface {
 	UpdateLoadBalancer(lbId int, lb *datatypes.SoftLayer_Load_Balancer_Update) (bool, error)
 
 	CreateLoadBalancerVirtualServer(lbId int, createOptions *SoftLayer_Load_Balancer_Service_Group_CreateOptions) (bool, error)
+	UpdateLoadBalancerVirtualServer(lbId int, updateOptions *datatypes.Softlayer_Load_Balancer_Virtual_Server) (bool, error)
 
 	CreateLoadBalancerService(lbId int, createOptions *SoftLayer_Load_Balancer_Service_CreateOptions) (bool, error)
 
