@@ -75,7 +75,7 @@ var _ = Describe("SoftLayer_Billing_Item", func() {
 						data_types.SoftLayer_Billing_Order_Item{Id: 123456789},
 					},
 				},
-			}, "COMPLETE")
+			}, []string{})
 			Expect(err).ToNot(HaveOccurred())
 			Expect(completed).To(BeTrue())
 		})
