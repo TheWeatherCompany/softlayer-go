@@ -78,6 +78,17 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancer(createOptions *soft
 }
 
 func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerVirtualServer(lbId int, createOptions *softlayer.SoftLayer_Load_Balancer_Service_Group_CreateOptions) (bool, error) {
+	routingMethodId, err := common.GetRoutingMethodByName(slnadclbs.client, createOptions.RoutingMethod)
+
+	if err != nil {
+		return false, err
+	}
+
+	routingTypeId, err := common.GetRoutingTypeByName(slnadclbs.client, createOptions.RoutingType)
+
+	if err != nil {
+		return false, err
+	}
 
 	parameters := datatypes.SoftLayer_Load_Balancer_Virtual_Server_Update_Parameters{
 		Parameters: []datatypes.Softlayer_Load_Balancer_Virtual_Server_Parameters{{
@@ -85,8 +96,8 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerVirtualServer(lbId i
 				Allocation: createOptions.Allocation,
 				Port:       createOptions.Port,
 				ServiceGroups: []*datatypes.Softlayer_Service_Group{{
-					RoutingMethodId: createOptions.RoutingMethodId,
-					RoutingTypeId:   createOptions.RoutingTypeId,
+					RoutingMethodId: routingMethodId,
+					RoutingTypeId:   routingTypeId,
 				}},
 			}},
 		}},
@@ -108,17 +119,41 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerVirtualServer(lbId i
 	return true, nil
 }
 
-func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancerVirtualServer(lbId int, updateOptions *datatypes.Softlayer_Load_Balancer_Virtual_Server) (bool, error) {
+func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancerVirtualServer(lbId int, sgId int, updateOptions *softlayer.SoftLayer_Load_Balancer_Service_Group_CreateOptions) (bool, error) {
+	loadBalancer, err := slnadclbs.GetObject(lbId)
+
+	if err != nil {
+		return false, fmt.Errorf("Load balancer with id '%d' is not found: %s", lbId, err)
+	}
+
+	routingMethodId, err := common.GetRoutingMethodByName(slnadclbs.client, updateOptions.RoutingMethod)
+
+	if err != nil {
+		return false, err
+	}
+
+	routingTypeId, err := common.GetRoutingTypeByName(slnadclbs.client, updateOptions.RoutingType)
+
+	if err != nil {
+		return false, err
+	}
+
+	virtualServer, err := getVsFromSgId(sgId, loadBalancer.VirtualServers)
+
+	if err != nil {
+		return false, err
+	}
+
 	parameters := datatypes.SoftLayer_Load_Balancer_Virtual_Server_Update_Parameters{
 		Parameters: []datatypes.Softlayer_Load_Balancer_Virtual_Server_Parameters{{
 			VirtualServers: []*datatypes.Softlayer_Load_Balancer_Virtual_Server{{
-				Id:         updateOptions.Id,
+				Id:         virtualServer.Id,
 				Allocation: updateOptions.Allocation,
 				Port:       updateOptions.Port,
 				ServiceGroups: []*datatypes.Softlayer_Service_Group{{
-					Id:              updateOptions.ServiceGroups[0].Id,
-					RoutingMethodId: updateOptions.ServiceGroups[0].RoutingMethodId,
-					RoutingTypeId:   updateOptions.ServiceGroups[0].RoutingTypeId,
+					Id:              sgId,
+					RoutingMethodId: routingMethodId,
+					RoutingTypeId:   routingTypeId,
 					Services:        []*datatypes.Softlayer_Service{},
 				}},
 			}},
@@ -126,9 +161,6 @@ func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancerVirtualServer(lbId i
 	}
 
 	requestBody, err := json.Marshal(parameters)
-	if err != nil {
-		return false, fmt.Errorf("Load balancer with id '%d' is not found: %s", lbId, err)
-	}
 
 	response, errorCode, error := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/%s.json", slnadclbs.GetName(), lbId, "editObject"), "POST", bytes.NewBuffer(requestBody))
 
@@ -468,4 +500,20 @@ func (slnadclbs *softLayer_Load_Balancer) GetBillingItem(id int) (datatypes.Soft
 	}
 
 	return billingItem, nil
+}
+
+func getVsFromSgId(sgId int, virtualServers []*datatypes.Softlayer_Load_Balancer_Virtual_Server) (datatypes.Softlayer_Load_Balancer_Virtual_Server, error) {
+	virtualServer := new(datatypes.Softlayer_Load_Balancer_Virtual_Server)
+
+	for _, vs := range virtualServers {
+		if vs.ServiceGroups[0].Id == sgId {
+			virtualServer = vs
+		}
+	}
+
+	if virtualServer == nil {
+		return datatypes.Softlayer_Load_Balancer_Virtual_Server{}, fmt.Errorf("Virtual server with id '%d' is not found", sgId)
+	}
+
+	return *virtualServer, nil
 }
