@@ -142,26 +142,49 @@ func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancerVirtualServer(lbId i
 }
 
 func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerService(lbId int, createOptions *softlayer.SoftLayer_Load_Balancer_Service_CreateOptions) (bool, error) {
+	loadBalancer, err := slnadclbs.GetObject(lbId)
+
+	if err != nil {
+		return false, fmt.Errorf("Load balancer with id '%d' is not found: %s", lbId, err)
+	}
+
+	virtualServer := new(datatypes.Softlayer_Load_Balancer_Virtual_Server)
+
+	for _, vs := range loadBalancer.VirtualServers {
+		if vs.ServiceGroups[0].Id == createOptions.ServiceGroupId {
+			virtualServer = vs
+		}
+	}
+
+	if virtualServer == nil {
+		return false, fmt.Errorf("Service group with id '%d' is not found", createOptions.ServiceGroupId)
+	}
+
+	healthCheckType, err := common.GetHealthCheckTypeByName(slnadclbs.client, createOptions.HealthCheckType)
+
+	if err != nil {
+		return false, err
+	}
 
 	parameters := datatypes.SoftLayer_Load_Balancer_Virtual_Server_Update_Parameters{
 		Parameters: []datatypes.Softlayer_Load_Balancer_Virtual_Server_Parameters{{
 			VirtualServers: []*datatypes.Softlayer_Load_Balancer_Virtual_Server{{
-				Id:         createOptions.VirtualServerId,
-				Allocation: createOptions.Allocation,
-				Port:       createOptions.Port,
+				Id:         virtualServer.Id,
+				Allocation: virtualServer.Allocation,
+				Port:       virtualServer.Port,
 				ServiceGroups: []*datatypes.Softlayer_Service_Group{{
 					Id:              createOptions.ServiceGroupId,
-					RoutingMethodId: createOptions.RoutingMethodId,
-					RoutingTypeId:   createOptions.RoutingTypeId,
-					Services:        []*datatypes.Softlayer_Service{{
-						Enabled:         createOptions.Service.Enabled,
-						Port:            createOptions.Service.Port,
-						IpAddressId:     createOptions.Service.IpAddressId,
-						HealthChecks:    []*datatypes.Softlayer_Health_Check{{
-							HealthCheckTypeId: createOptions.Service.HealthChecks[0].HealthCheckTypeId,
+					RoutingMethodId: virtualServer.ServiceGroups[0].RoutingMethodId,
+					RoutingTypeId:   virtualServer.ServiceGroups[0].RoutingTypeId,
+					Services: []*datatypes.Softlayer_Service{{
+						Enabled:     createOptions.Enabled,
+						Port:        createOptions.Port,
+						IpAddressId: createOptions.IpAddressId,
+						HealthChecks: []*datatypes.Softlayer_Health_Check{{
+							HealthCheckTypeId: healthCheckType,
 						}},
 						GroupReferences: []*datatypes.Softlayer_Group_Reference{{
-							Weight: createOptions.Service.GroupReferences[0].Weight,
+							Weight: createOptions.Weight,
 						}},
 					}},
 				}},

@@ -18,13 +18,12 @@ type SoftLayer_Load_Balancer_Service_Group_CreateOptions struct {
 }
 
 type SoftLayer_Load_Balancer_Service_CreateOptions struct {
-	VirtualServerId int
 	ServiceGroupId  int
-	Allocation      int
+	Enabled         int
 	Port            int
-	RoutingMethodId int
-	RoutingTypeId   int
-	Service         *datatypes.Softlayer_Service
+	IpAddressId     int
+	HealthCheckType string
+	Weight          int
 }
 
 type SoftLayer_Load_Balancer_Service interface {
