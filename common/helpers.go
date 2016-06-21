@@ -15,6 +15,16 @@ const (
 	ROUTING_TYPE_NAME      = "SoftLayer_Network_Application_Delivery_Controller_LoadBalancer_Routing_Type"
 	ROUTING_METHOD_NAME    = "SoftLayer_Network_Application_Delivery_Controller_LoadBalancer_Routing_Method"
 	HEALTH_CHECK_TYPE_NAME = "SoftLayer_Network_Application_Delivery_Controller_LoadBalancer_Health_Check_Type"
+
+	DATACENTER_VALUE_NAME        = "name"
+	ROUTING_TYPE_VALUE_NAME      = "keyname"
+	ROUTING_METHOD_VALUE_NAME    = "keyname"
+	HEALTH_CHECK_TYPE_VALUE_NAME = "keyname"
+
+	DATACENTER_GET_JSON_NAME        = "getDatacenters.json"
+	ROUTING_TYPE_GET_JSON_NAME      = "getAllObjects.json"
+	ROUTING_METHOD_GET_JSON_NAME    = "getAllObjects.json"
+	HEALTH_CHECK_TYPE_GET_JSON_NAME = "getAllObjects.json"
 )
 
 type lookup func([]byte) (interface{}, error)
@@ -59,7 +69,7 @@ func GetDatacenter(client softlayer.Client, key interface{}) (interface{}, error
 		return -1, err
 	}
 
-	return getValueFromKey(client, "name", DATACENTER_TYPE_NAME, "getDatacenters.json", key, getById,
+	return getValueFromKey(client, DATACENTER_VALUE_NAME, DATACENTER_TYPE_NAME, DATACENTER_GET_JSON_NAME, key, getById,
 		func(response []byte) (interface{}, error) {
 			locations := []datatypes.SoftLayer_Location{}
 
@@ -87,7 +97,7 @@ func GetRoutingType(client softlayer.Client, key interface{}) (interface{}, erro
 		return -1, err
 	}
 
-	return getValueFromKey(client, "keyname", ROUTING_TYPE_NAME, "getAllObjects.json", key, getById,
+	return getValueFromKey(client, ROUTING_TYPE_VALUE_NAME, ROUTING_TYPE_NAME, ROUTING_TYPE_GET_JSON_NAME, key, getById,
 		func(response []byte) (interface{}, error) {
 			routingTypes := []datatypes.SoftLayer_Routing_Type{}
 
@@ -115,7 +125,7 @@ func GetRoutingMethod(client softlayer.Client, key interface{}) (interface{}, er
 		return -1, err
 	}
 
-	return getValueFromKey(client, "keyname", ROUTING_METHOD_NAME, "getAllObjects.json", key, getById,
+	return getValueFromKey(client, ROUTING_METHOD_VALUE_NAME, ROUTING_METHOD_NAME, ROUTING_METHOD_GET_JSON_NAME, key, getById,
 		func(response []byte) (interface{}, error) {
 			routingMethods := []datatypes.SoftLayer_Routing_Method{}
 
@@ -143,7 +153,7 @@ func GetHealthCheckType(client softlayer.Client, key interface{}) (interface{}, 
 		return -1, err
 	}
 
-	return getValueFromKey(client, "keyname", HEALTH_CHECK_TYPE_NAME, "getAllObjects.json", key, getById,
+	return getValueFromKey(client, HEALTH_CHECK_TYPE_VALUE_NAME, HEALTH_CHECK_TYPE_NAME, HEALTH_CHECK_TYPE_GET_JSON_NAME, key, getById,
 		func(response []byte) (interface{}, error) {
 			healthCheckTypes := []datatypes.SoftLayer_Health_Check_Type{}
 
