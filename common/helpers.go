@@ -42,16 +42,22 @@ func isInt(key interface{}) (bool, error) {
 
 func getValueFromKey(client softlayer.Client, nameMask string, nameType string, nameTypeGet string, key interface{}, getById bool, lookupFunc lookup) (interface{}, error) {
 	var ObjectFilter, Url string
+	var response []byte
+	var errorCode int
+	var err error
+
+	ObjectMasks := []string{"id", nameMask}
+
 	if getById {
 		Url = fmt.Sprintf("%s/%d/getObject.json", nameType, key.(int))
 		ObjectFilter = string(`{"id":{"operation":"` + strconv.Itoa(key.(int)) + `"}}`)
+		response, errorCode, err = client.GetHttpClient().DoRawHttpRequestWithObjectMask(Url, ObjectMasks, "GET", new(bytes.Buffer))
 	} else {
 		Url = fmt.Sprintf("%s/%s", nameType, nameTypeGet)
 		ObjectFilter = string(`{"` + nameMask + `":{"operation":"` + key.(string) + `"}}`)
+		response, errorCode, err = client.GetHttpClient().DoRawHttpRequestWithObjectFilterAndObjectMask(Url, ObjectMasks, ObjectFilter, "GET", new(bytes.Buffer))
 	}
-	ObjectMasks := []string{"id", nameMask}
 
-	response, errorCode, err := client.GetHttpClient().DoRawHttpRequestWithObjectFilterAndObjectMask(Url, ObjectMasks, ObjectFilter, "GET", new(bytes.Buffer))
 	if err != nil {
 		return -1, err
 	}
