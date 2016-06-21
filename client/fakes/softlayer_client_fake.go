@@ -78,6 +78,15 @@ func (slc *FakeSoftLayerClient) GetSoftLayer_User_Customer_Service() (softlayer.
 	return slService.(softlayer.SoftLayer_User_Customer_Service), nil
 }
 
+func (slc *FakeSoftLayerClient) GetSoftLayer_Scale_Group_Service() (softlayer.SoftLayer_Scale_Group_Service, error) {
+	slService, err := slc.GetService("SoftLayer_Scale_Group")
+	if err != nil {
+		return nil, err
+	}
+
+	return slService.(softlayer.SoftLayer_Scale_Group_Service), nil
+}
+
 func (fslc *FakeSoftLayerClient) GetSoftLayer_Virtual_Guest_Service() (softlayer.SoftLayer_Virtual_Guest_Service, error) {
 	slService, err := fslc.GetService("SoftLayer_Virtual_Guest")
 	if err != nil {
