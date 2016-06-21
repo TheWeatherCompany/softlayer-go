@@ -19,8 +19,8 @@ type Softlayer_Service_Group struct {
 	Id              int                  `json:"id,omitempty"`
 	RoutingMethodId int                  `json:"routingMethodId"`
 	RoutingTypeId   int                  `json:"routingTypeId"`
-	RoutingMethod   string
-	RoutingType     string
+	RoutingMethod   string               `json:"routingMethod,omitempty"`
+	RoutingType     string               `json:"routingId,omitempty"`
 	Services        []*Softlayer_Service `json:"services"`
 }
 
@@ -34,7 +34,8 @@ type Softlayer_Service struct {
 }
 
 type Softlayer_Health_Check struct {
-	HealthCheckTypeId int `json:"healthCheckTypeId"`
+	HealthCheckTypeId int    `json:"healthCheckTypeId"`
+	HealthCheckType   string `json:"healthCheckType"`
 }
 
 type Softlayer_Group_Reference struct {

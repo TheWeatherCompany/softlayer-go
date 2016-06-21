@@ -313,6 +313,16 @@ func (slnadclbs *softLayer_Load_Balancer) GetObject(id int) (datatypes.SoftLayer
 
 			serviceGroup.RoutingType = routingType.(string)
 			serviceGroup.RoutingMethod = routingMethod.(string)
+
+			for _, service := range serviceGroup.Services {
+				healthCheckType, err := common.GetHealthCheckType(slnadclbs.client, service.HealthChecks[0].HealthCheckTypeId)
+
+				if err != nil {
+					return datatypes.SoftLayer_Load_Balancer{}, err
+				}
+
+				service.HealthChecks[0].HealthCheckType = healthCheckType.(string)
+			}
 		}
 	}
 
