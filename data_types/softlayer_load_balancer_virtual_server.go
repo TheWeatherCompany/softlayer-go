@@ -35,7 +35,7 @@ type Softlayer_Service struct {
 
 type Softlayer_Health_Check struct {
 	HealthCheckTypeId int    `json:"healthCheckTypeId"`
-	HealthCheckType   string `json:"healthCheckType"`
+	HealthCheckType   string `json:"healthCheckType,omitempty"`
 }
 
 type Softlayer_Group_Reference struct {
