@@ -239,6 +239,61 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerService(lbId int, cr
 	return true, nil
 }
 
+func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancerService(lbId int, sgId int, sId int, updateOptions *softlayer.SoftLayer_Load_Balancer_Service_CreateOptions) (bool, error) {
+	loadBalancer, err := slnadclbs.GetObject(lbId)
+
+	if err != nil {
+		return false, fmt.Errorf("Load balancer with id '%d' is not found: %s", lbId, err)
+	}
+
+	healthCheckTypeId, err := common.GetRoutingType(slnadclbs.client, updateOptions.HealthCheckType)
+
+	if err != nil {
+		return false, err
+	}
+
+	virtualServer, err := getVsFromSgId(sgId, loadBalancer.VirtualServers)
+
+	if err != nil {
+		return false, err
+	}
+
+	parameters := datatypes.SoftLayer_Load_Balancer_Virtual_Server_Update_Parameters{
+		Parameters: []datatypes.Softlayer_Load_Balancer_Virtual_Server_Parameters{{
+			VirtualServers: []*datatypes.Softlayer_Load_Balancer_Virtual_Server{{
+				Id:         virtualServer.Id,
+				ServiceGroups: []*datatypes.Softlayer_Service_Group{{
+					Id:              sgId,
+					Services:        []*datatypes.Softlayer_Service{{
+						Id: sId,
+						Enabled: 1,
+						Port: updateOptions.Port,
+						IpAddressId: updateOptions.IpAddressId,
+						HealthChecks: []*datatypes.Softlayer_Health_Check{{
+							HealthCheckTypeId: healthCheckTypeId.(int),
+						}},
+						GroupReferences: []*datatypes.Softlayer_Group_Reference{{
+							Weight: updateOptions.Weight,
+						}},
+					}},
+				}},
+			}},
+		}},
+	}
+
+	requestBody, err := json.Marshal(parameters)
+
+	response, errorCode, error := slnadclbs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/%s.json", slnadclbs.GetName(), lbId, "editObject"), "POST", bytes.NewBuffer(requestBody))
+
+	if error != nil {
+		return false, error
+	} else if errorCode != 200 {
+		return false, fmt.Errorf(string(response))
+	}
+
+	return true, nil
+}
+
 func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancer(lbId int, lb *datatypes.SoftLayer_Load_Balancer_Update) (bool, error) {
 	object, err := slnadclbs.GetObject(lbId)
 	if err != nil {
