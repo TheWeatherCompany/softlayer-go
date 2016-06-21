@@ -84,7 +84,7 @@ var _ = Describe("SoftlayerLookupHelpers", func() {
 
 	Context("#GetDatacenterById", func() {
 		BeforeEach(func() {
-			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetDatacenterByName.json")
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetDatacenterById.json")
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -97,7 +97,7 @@ var _ = Describe("SoftlayerLookupHelpers", func() {
 
 	Context("#GetRoutingTypesById", func() {
 		BeforeEach(func() {
-			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetRoutingTypeByName.json")
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetRoutingTypeById.json")
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -110,7 +110,7 @@ var _ = Describe("SoftlayerLookupHelpers", func() {
 
 	Context("#GetRoutingMethodsById", func() {
 		BeforeEach(func() {
-			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetRoutingMethodByName.json")
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetRoutingMethodById.json")
 			Expect(err).ToNot(HaveOccurred())
 		})
 
@@ -123,7 +123,7 @@ var _ = Describe("SoftlayerLookupHelpers", func() {
 
 	Context("#GetHealthCheckTypesById", func() {
 		BeforeEach(func() {
-			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetHealthCheckTypeByName.json")
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetHealthCheckTypeById.json")
 			Expect(err).ToNot(HaveOccurred())
 		})
 

@@ -41,15 +41,17 @@ func isInt(key interface{}) (bool, error) {
 }
 
 func getValueFromKey(client softlayer.Client, nameMask string, nameType string, nameTypeGet string, key interface{}, getById bool, lookupFunc lookup) (interface{}, error) {
-	var ObjectFilter string
+	var ObjectFilter, Url string
 	if getById {
+		Url = fmt.Sprintf("%s/%d/getObject.json", nameType, key.(int))
 		ObjectFilter = string(`{"id":{"operation":"` + strconv.Itoa(key.(int)) + `"}}`)
 	} else {
+		Url = fmt.Sprintf("%s/%s", nameType, nameTypeGet)
 		ObjectFilter = string(`{"` + nameMask + `":{"operation":"` + key.(string) + `"}}`)
 	}
 	ObjectMasks := []string{"id", nameMask}
 
-	response, errorCode, err := client.GetHttpClient().DoRawHttpRequestWithObjectFilterAndObjectMask(fmt.Sprintf("%s/%s", nameType, nameTypeGet), ObjectMasks, ObjectFilter, "GET", new(bytes.Buffer))
+	response, errorCode, err := client.GetHttpClient().DoRawHttpRequestWithObjectFilterAndObjectMask(Url, ObjectMasks, ObjectFilter, "GET", new(bytes.Buffer))
 	if err != nil {
 		return -1, err
 	}
@@ -71,22 +73,33 @@ func GetDatacenter(client softlayer.Client, key interface{}) (interface{}, error
 
 	return getValueFromKey(client, DATACENTER_VALUE_NAME, DATACENTER_TYPE_NAME, DATACENTER_GET_JSON_NAME, key, getById,
 		func(response []byte) (interface{}, error) {
-			locations := []datatypes.SoftLayer_Location{}
+			if getById {
+				location := datatypes.SoftLayer_Location{}
 
-			err := json.Unmarshal(response, &locations)
-			if err != nil {
-				return -1, err
-			}
+				err := json.Unmarshal(response, &location)
 
-			for _, location := range locations {
-				if getById && location.Id == key.(int) {
-					return location.Name, nil
-				} else if !getById && location.Name == key.(string) {
-					return location.Id, nil
+				if err != nil {
+					return -1, err
 				}
-			}
 
-			return -1, fmt.Errorf("Datacenter %s not found", key)
+				return location.Name, nil
+			} else {
+				locations := []datatypes.SoftLayer_Location{}
+
+				err := json.Unmarshal(response, &locations)
+
+				if err != nil {
+					return -1, err
+				}
+
+				for _, location := range locations {
+					if location.Name == key.(string) {
+						return location.Id, nil
+					}
+				}
+
+				return -1, fmt.Errorf("Datacenter %s not found", key)
+			}
 		})
 }
 
@@ -99,22 +112,33 @@ func GetRoutingType(client softlayer.Client, key interface{}) (interface{}, erro
 
 	return getValueFromKey(client, ROUTING_TYPE_VALUE_NAME, ROUTING_TYPE_NAME, ROUTING_TYPE_GET_JSON_NAME, key, getById,
 		func(response []byte) (interface{}, error) {
-			routingTypes := []datatypes.SoftLayer_Routing_Type{}
+			if getById {
+				routingType := datatypes.SoftLayer_Routing_Type{}
 
-			err := json.Unmarshal(response, &routingTypes)
-			if err != nil {
-				return -1, err
-			}
+				err := json.Unmarshal(response, &routingType)
 
-			for _, routingType := range routingTypes {
-				if getById && routingType.Id == key.(int) {
-					return routingType.KeyName, nil
-				} else if !getById && routingType.KeyName == key.(string) {
-					return routingType.Id, nil
+				if err != nil {
+					return -1, err
 				}
-			}
 
-			return -1, fmt.Errorf("Routing type %s not found", key)
+				return routingType.KeyName, nil
+			} else {
+				routingTypes := []datatypes.SoftLayer_Routing_Type{}
+
+				err := json.Unmarshal(response, &routingTypes)
+
+				if err != nil {
+					return -1, err
+				}
+
+				for _, routingType := range routingTypes {
+					if routingType.KeyName == key.(string) {
+						return routingType.Id, nil
+					}
+				}
+
+				return -1, fmt.Errorf("Routing type %s not found", key)
+			}
 		})
 }
 
@@ -127,22 +151,33 @@ func GetRoutingMethod(client softlayer.Client, key interface{}) (interface{}, er
 
 	return getValueFromKey(client, ROUTING_METHOD_VALUE_NAME, ROUTING_METHOD_NAME, ROUTING_METHOD_GET_JSON_NAME, key, getById,
 		func(response []byte) (interface{}, error) {
-			routingMethods := []datatypes.SoftLayer_Routing_Method{}
+			if getById {
+				routingMethod := datatypes.SoftLayer_Routing_Method{}
 
-			err := json.Unmarshal(response, &routingMethods)
-			if err != nil {
-				return -1, err
-			}
+				err := json.Unmarshal(response, &routingMethod)
 
-			for _, routingMethod := range routingMethods {
-				if getById && routingMethod.Id == key.(int) {
-					return routingMethod.KeyName, nil
-				} else if !getById && routingMethod.KeyName == key.(string) {
-					return routingMethod.Id, nil
+				if err != nil {
+					return -1, err
 				}
-			}
 
-			return -1, fmt.Errorf("Routing method %s not found", key)
+				return routingMethod.KeyName, nil
+			} else {
+				routingMethods := []datatypes.SoftLayer_Routing_Method{}
+
+				err := json.Unmarshal(response, &routingMethods)
+
+				if err != nil {
+					return -1, err
+				}
+
+				for _, routingMethod := range routingMethods {
+					if routingMethod.KeyName == key.(string) {
+						return routingMethod.Id, nil
+					}
+				}
+
+				return -1, fmt.Errorf("Routing method %s not found", key)
+			}
 		})
 }
 
@@ -155,21 +190,32 @@ func GetHealthCheckType(client softlayer.Client, key interface{}) (interface{}, 
 
 	return getValueFromKey(client, HEALTH_CHECK_TYPE_VALUE_NAME, HEALTH_CHECK_TYPE_NAME, HEALTH_CHECK_TYPE_GET_JSON_NAME, key, getById,
 		func(response []byte) (interface{}, error) {
-			healthCheckTypes := []datatypes.SoftLayer_Health_Check_Type{}
+			if getById {
+				healthCheckType := datatypes.SoftLayer_Health_Check_Type{}
 
-			err := json.Unmarshal(response, &healthCheckTypes)
-			if err != nil {
-				return -1, err
-			}
+				err := json.Unmarshal(response, &healthCheckType)
 
-			for _, healthCheckType := range healthCheckTypes {
-				if getById && healthCheckType.Id == key.(int) {
-					return healthCheckType.KeyName, nil
-				} else if !getById && healthCheckType.KeyName == key.(string) {
-					return healthCheckType.Id, nil
+				if err != nil {
+					return -1, err
 				}
-			}
 
-			return -1, fmt.Errorf("Health check type %s not found", key)
+				return healthCheckType.KeyName, nil
+			} else {
+				healthCheckTypes := []datatypes.SoftLayer_Health_Check_Type{}
+
+				err := json.Unmarshal(response, &healthCheckTypes)
+
+				if err != nil {
+					return -1, err
+				}
+
+				for _, healthCheckType := range healthCheckTypes {
+					if healthCheckType.KeyName == key.(string) {
+						return healthCheckType.Id, nil
+					}
+				}
+
+				return -1, fmt.Errorf("Health check type %s not found", key)
+			}
 		})
 }
