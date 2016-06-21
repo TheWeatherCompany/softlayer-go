@@ -50,7 +50,7 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancer(createOptions *soft
 		return datatypes.SoftLayer_Load_Balancer{}, err
 	}
 
-	location, err := common.GetDatacenterByName(slnadclbs.client, createOptions.Location)
+	location, err := common.GetDatacenter(slnadclbs.client, createOptions.Location)
 
 	if err != nil {
 		return datatypes.SoftLayer_Load_Balancer{}, err
@@ -59,7 +59,7 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancer(createOptions *soft
 	order := datatypes.SoftLayer_Container_Product_Order_Load_Balancer{
 		PackageId:   PACKAGE_ID_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER,
 		ComplexType: ORDER_TYPE_APPLICATION_DELIVERY_CONTROLLER_LOAD_BALANCER,
-		Location:    location,
+		Location:    location.(int),
 		Prices:      items,
 		Quantity:    1,
 	}
@@ -78,13 +78,13 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancer(createOptions *soft
 }
 
 func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerVirtualServer(lbId int, createOptions *softlayer.SoftLayer_Load_Balancer_Service_Group_CreateOptions) (bool, error) {
-	routingMethodId, err := common.GetRoutingMethodByName(slnadclbs.client, createOptions.RoutingMethod)
+	routingMethodId, err := common.GetRoutingMethod(slnadclbs.client, createOptions.RoutingMethod)
 
 	if err != nil {
 		return false, err
 	}
 
-	routingTypeId, err := common.GetRoutingTypeByName(slnadclbs.client, createOptions.RoutingType)
+	routingTypeId, err := common.GetRoutingType(slnadclbs.client, createOptions.RoutingType)
 
 	if err != nil {
 		return false, err
@@ -96,8 +96,8 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerVirtualServer(lbId i
 				Allocation: createOptions.Allocation,
 				Port:       createOptions.Port,
 				ServiceGroups: []*datatypes.Softlayer_Service_Group{{
-					RoutingMethodId: routingMethodId,
-					RoutingTypeId:   routingTypeId,
+					RoutingMethodId: routingMethodId.(int),
+					RoutingTypeId:   routingTypeId.(int),
 				}},
 			}},
 		}},
@@ -126,13 +126,13 @@ func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancerVirtualServer(lbId i
 		return false, fmt.Errorf("Load balancer with id '%d' is not found: %s", lbId, err)
 	}
 
-	routingMethodId, err := common.GetRoutingMethodByName(slnadclbs.client, updateOptions.RoutingMethod)
+	routingMethodId, err := common.GetRoutingMethod(slnadclbs.client, updateOptions.RoutingMethod)
 
 	if err != nil {
 		return false, err
 	}
 
-	routingTypeId, err := common.GetRoutingTypeByName(slnadclbs.client, updateOptions.RoutingType)
+	routingTypeId, err := common.GetRoutingType(slnadclbs.client, updateOptions.RoutingType)
 
 	if err != nil {
 		return false, err
@@ -152,8 +152,8 @@ func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancerVirtualServer(lbId i
 				Port:       updateOptions.Port,
 				ServiceGroups: []*datatypes.Softlayer_Service_Group{{
 					Id:              sgId,
-					RoutingMethodId: routingMethodId,
-					RoutingTypeId:   routingTypeId,
+					RoutingMethodId: routingMethodId.(int),
+					RoutingTypeId:   routingTypeId.(int),
 					Services:        []*datatypes.Softlayer_Service{},
 				}},
 			}},
@@ -192,7 +192,7 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerService(lbId int, cr
 		return false, fmt.Errorf("Service group with id '%d' is not found", createOptions.ServiceGroupId)
 	}
 
-	healthCheckType, err := common.GetHealthCheckTypeByName(slnadclbs.client, createOptions.HealthCheckType)
+	healthCheckType, err := common.GetHealthCheckType(slnadclbs.client, createOptions.HealthCheckType)
 
 	if err != nil {
 		return false, err
@@ -213,7 +213,7 @@ func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancerService(lbId int, cr
 						Port:        createOptions.Port,
 						IpAddressId: createOptions.IpAddressId,
 						HealthChecks: []*datatypes.Softlayer_Health_Check{{
-							HealthCheckTypeId: healthCheckType,
+							HealthCheckTypeId: healthCheckType.(int),
 						}},
 						GroupReferences: []*datatypes.Softlayer_Group_Reference{{
 							Weight: createOptions.Weight,
