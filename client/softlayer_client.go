@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/TheWeatherCompany/softlayer-go/services"
-	"github.com/TheWeatherCompany/softlayer-go/softlayer"
+	services "github.com/TheWeatherCompany/softlayer-go/services"
+	softlayer "github.com/TheWeatherCompany/softlayer-go/softlayer"
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
@@ -73,6 +73,15 @@ func (slc *SoftLayerClient) GetSoftLayer_User_Customer_Service() (softlayer.Soft
 	}
 
 	return slService.(softlayer.SoftLayer_User_Customer_Service), nil
+}
+
+func (slc *SoftLayerClient) GetSoftLayer_Scale_Group_Service() (softlayer.SoftLayer_Scale_Group_Service, error) {
+	slService, err := slc.GetService("SoftLayer_Scale_Group")
+	if err != nil {
+		return nil, err
+	}
+
+	return slService.(softlayer.SoftLayer_Scale_Group_Service), nil
 }
 
 func (slc *SoftLayerClient) GetSoftLayer_Virtual_Guest_Service() (softlayer.SoftLayer_Virtual_Guest_Service, error) {
@@ -303,6 +312,7 @@ func (slc *SoftLayerClient) initSoftLayerServices() {
 	slc.softLayerServices["SoftLayer_Network_Application_Delivery_Controller_Service"] = services.NewSoftLayer_Network_Application_Delivery_Controller_Service(slc)
 	slc.softLayerServices["SoftLayer_Security_Certificate"] = services.NewSoftLayer_Security_Certificate_Service(slc)
 	slc.softLayerServices["SoftLayer_User_Customer"] = services.NewSoftLayer_User_Customer_Service(slc)
+	slc.softLayerServices["SoftLayer_Scale_Group"] = services.NewSoftLayer_Scale_Group_Service(slc)
 	slc.softLayerServices["SoftLayer_Load_Balancer_Service"] = services.NewSoftLayer_Load_Balancer(slc)
 	slc.softLayerServices["SoftLayer_Load_Balancer_Service_Group"] = services.NewSoftLayer_Load_Balancer_Service_Group_Service(slc)
 	slc.softLayerServices["SoftLayer_Provisioning_Hook"] = services.NewSoftLayer_Provisioning_Hook_Service(slc)
