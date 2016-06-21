@@ -246,7 +246,7 @@ func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancerService(lbId int, sg
 		return false, fmt.Errorf("Load balancer with id '%d' is not found: %s", lbId, err)
 	}
 
-	healthCheckTypeId, err := common.GetRoutingType(slnadclbs.client, updateOptions.HealthCheckType)
+	healthCheckTypeId, err := common.GetHealthCheckType(slnadclbs.client, updateOptions.HealthCheckType)
 
 	if err != nil {
 		return false, err
