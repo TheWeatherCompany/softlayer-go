@@ -23,6 +23,6 @@ func (slsgs *softlayer_Scale_Group_Service) CreateObject(template data_types.Sof
 	return data_types.SoftLayer_Scale_Group{}, nil
 }
 
-func (slsgs *softlayer_Scale_Group_Service) DeleteObject(userid int) (bool, error) {
+func (slsgs *softlayer_Scale_Group_Service) DeleteObject(group int) (bool, error) {
 	return true, nil
 }
