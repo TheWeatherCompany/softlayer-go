@@ -19,6 +19,8 @@ type Softlayer_Service_Group struct {
 	Id              int                  `json:"id,omitempty"`
 	RoutingMethodId int                  `json:"routingMethodId"`
 	RoutingTypeId   int                  `json:"routingTypeId"`
+	RoutingMethod   string
+	RoutingType     string
 	Services        []*Softlayer_Service `json:"services"`
 }
 

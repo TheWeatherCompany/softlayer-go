@@ -39,7 +39,6 @@ func (slnadcs *softLayer_Load_Balancer) GetName() string {
 }
 
 func (slnadclbs *softLayer_Load_Balancer) CreateLoadBalancer(createOptions *softlayer.SoftLayer_Load_Balancer_CreateOptions) (datatypes.SoftLayer_Load_Balancer, error) {
-
 	orderService, err := slnadclbs.client.GetSoftLayer_Product_Order_Service()
 	if err != nil {
 		return datatypes.SoftLayer_Load_Balancer{}, err
@@ -296,6 +295,25 @@ func (slnadclbs *softLayer_Load_Balancer) GetObject(id int) (datatypes.SoftLayer
 	err = json.Unmarshal(response, &lb)
 	if err != nil {
 		return datatypes.SoftLayer_Load_Balancer{}, err
+	}
+
+	for _, virtualServer := range lb.VirtualServers {
+		for _, serviceGroup := range virtualServer.ServiceGroups {
+			routingType, err := common.GetRoutingType(slnadclbs.client, serviceGroup.RoutingTypeId)
+
+			if err != nil {
+				return datatypes.SoftLayer_Load_Balancer{}, err
+			}
+
+			routingMethod, err := common.GetRoutingMethod(slnadclbs.client, serviceGroup.RoutingMethodId)
+
+			if err != nil {
+				return datatypes.SoftLayer_Load_Balancer{}, err
+			}
+
+			serviceGroup.RoutingType = routingType.(string)
+			serviceGroup.RoutingMethod = routingMethod.(string)
+		}
 	}
 
 	return lb, nil
