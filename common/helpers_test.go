@@ -37,7 +37,7 @@ var _ = Describe("SoftlayerLookupHelpers", func() {
 		})
 
 		It("sucessfully retrieves ID of datacenter", func() {
-			id, err := common.GetDatacenterByName(fakeClient, "ams01")
+			id, err := common.GetDatacenter(fakeClient, "ams01")
 			Expect(err).ToNot(HaveOccurred())
 			Expect(id).To(Equal(265592))
 		})
@@ -50,7 +50,7 @@ var _ = Describe("SoftlayerLookupHelpers", func() {
 		})
 
 		It("sucessfully retrieves ID of routing type", func() {
-			id, err := common.GetRoutingTypeByName(fakeClient, "DNS")
+			id, err := common.GetRoutingType(fakeClient, "DNS")
 			Expect(err).ToNot(HaveOccurred())
 			Expect(id).To(Equal(4))
 		})
@@ -63,7 +63,7 @@ var _ = Describe("SoftlayerLookupHelpers", func() {
 		})
 
 		It("sucessfully retrieves ID of routing type", func() {
-			id, err := common.GetRoutingMethodByName(fakeClient, "ROUND_ROBIN")
+			id, err := common.GetRoutingMethod(fakeClient, "ROUND_ROBIN")
 			Expect(err).ToNot(HaveOccurred())
 			Expect(id).To(Equal(10))
 		})
@@ -76,9 +76,61 @@ var _ = Describe("SoftlayerLookupHelpers", func() {
 		})
 
 		It("sucessfully retrieves ID of health check type", func() {
-			id, err := common.GetHealthCheckTypeByName(fakeClient, "DNS")
+			id, err := common.GetHealthCheckType(fakeClient, "DNS")
 			Expect(err).ToNot(HaveOccurred())
 			Expect(id).To(Equal(3))
+		})
+	})
+
+	Context("#GetDatacenterById", func() {
+		BeforeEach(func() {
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetDatacenterById.json")
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("sucessfully retrieves name of datacenter", func() {
+			id, err := common.GetDatacenter(fakeClient, 265592)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(id).To(Equal("ams01"))
+		})
+	})
+
+	Context("#GetRoutingTypesById", func() {
+		BeforeEach(func() {
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetRoutingTypeById.json")
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("sucessfully retrieves name of routing type", func() {
+			id, err := common.GetRoutingType(fakeClient, 4)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(id).To(Equal("DNS"))
+		})
+	})
+
+	Context("#GetRoutingMethodsById", func() {
+		BeforeEach(func() {
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetRoutingMethodById.json")
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("sucessfully retrieves name of routing type", func() {
+			id, err := common.GetRoutingMethod(fakeClient, 10)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(id).To(Equal("ROUND_ROBIN"))
+		})
+	})
+
+	Context("#GetHealthCheckTypesById", func() {
+		BeforeEach(func() {
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetHealthCheckTypeById.json")
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("sucessfully retrieves name of health check type", func() {
+			id, err := common.GetHealthCheckType(fakeClient, 3)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(id).To(Equal("DNS"))
 		})
 	})
 })
