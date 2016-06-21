@@ -7,6 +7,7 @@ import (
 	"fmt"
 	datatypes "github.com/TheWeatherCompany/softlayer-go/data_types"
 	"github.com/TheWeatherCompany/softlayer-go/softlayer"
+	"strconv"
 )
 
 const (
@@ -16,10 +17,26 @@ const (
 	HEALTH_CHECK_TYPE_NAME = "SoftLayer_Network_Application_Delivery_Controller_LoadBalancer_Health_Check_Type"
 )
 
-type lookup func([]byte) (int, error)
+type lookupId func([]byte) (interface{}, error)
 
-func getIdByName(client softlayer.Client, nameMask string, nameType string, nameTypeGet string, name string, lookupFunc lookup) (int, error) {
-	ObjectFilter := string(`{"` + nameMask + `":{"operation":"` + name + `"}}`)
+func isInt(key interface{}) (bool, error) {
+	switch v := key.(type) {
+	case int:
+		return true, nil
+	case string:
+		return false, nil
+	default:
+		return false, fmt.Errorf("Expected type string or int. Recieved type %s", v)
+	}
+}
+
+func getIdByName(client softlayer.Client, nameMask string, nameType string, nameTypeGet string, key interface{}, getById bool, lookupFunc lookupId) (interface{}, error) {
+	var ObjectFilter string
+	if getById {
+		ObjectFilter = string(`{"id":{"operation":"` + strconv.Itoa(key.(int)) + `"}}`)
+	} else {
+		ObjectFilter = string(`{"` + nameMask + `":{"operation":"` + key.(string) + `"}}`)
+	}
 	ObjectMasks := []string{"id", nameMask}
 
 	response, errorCode, err := client.GetHttpClient().DoRawHttpRequestWithObjectFilterAndObjectMask(fmt.Sprintf("%s/%s", nameType, nameTypeGet), ObjectMasks, ObjectFilter, "GET", new(bytes.Buffer))
@@ -35,9 +52,15 @@ func getIdByName(client softlayer.Client, nameMask string, nameType string, name
 	return lookupFunc(response)
 }
 
-func GetDatacenterByName(client softlayer.Client, name string) (int, error) {
-	return getIdByName(client, "name", DATACENTER_TYPE_NAME, "getDatacenters.json", name,
-		func(response []byte) (int, error) {
+func GetDatacenter(client softlayer.Client, key interface{}) (interface{}, error) {
+	getById, err := isInt(key)
+
+	if err != nil {
+		return -1, err
+	}
+
+	return getIdByName(client, "name", DATACENTER_TYPE_NAME, "getDatacenters.json", key, getById,
+		func(response []byte) (interface{}, error) {
 			locations := []datatypes.SoftLayer_Location{}
 
 			err := json.Unmarshal(response, &locations)
@@ -46,18 +69,26 @@ func GetDatacenterByName(client softlayer.Client, name string) (int, error) {
 			}
 
 			for _, location := range locations {
-				if location.Name == name {
+				if getById && location.Id == key.(int) {
+					return location.Name, nil
+				} else if !getById && location.Name == key.(string) {
 					return location.Id, nil
 				}
 			}
 
-			return -1, fmt.Errorf("Datacenter %s not found", name)
+			return -1, fmt.Errorf("Datacenter %s not found", key)
 		})
 }
 
-func GetRoutingTypeByName(client softlayer.Client, name string) (int, error) {
-	return getIdByName(client, "keyname", ROUTING_TYPE_NAME, "getAllObjects.json", name,
-		func(response []byte) (int, error) {
+func GetRoutingType(client softlayer.Client, key interface{}) (interface{}, error) {
+	getById, err := isInt(key)
+
+	if err != nil {
+		return -1, err
+	}
+
+	return getIdByName(client, "keyname", ROUTING_TYPE_NAME, "getAllObjects.json", key, getById,
+		func(response []byte) (interface{}, error) {
 			routingTypes := []datatypes.SoftLayer_Routing_Type{}
 
 			err := json.Unmarshal(response, &routingTypes)
@@ -66,18 +97,26 @@ func GetRoutingTypeByName(client softlayer.Client, name string) (int, error) {
 			}
 
 			for _, routingType := range routingTypes {
-				if routingType.KeyName == name {
+				if getById && routingType.Id == key.(int) {
+					return routingType.KeyName, nil
+				} else if !getById && routingType.KeyName == key.(string) {
 					return routingType.Id, nil
 				}
 			}
 
-			return -1, fmt.Errorf("Routing type %s not found", name)
+			return -1, fmt.Errorf("Routing type %s not found", key)
 		})
 }
 
-func GetRoutingMethodByName(client softlayer.Client, name string) (int, error) {
-	return getIdByName(client, "keyname", ROUTING_METHOD_NAME, "getAllObjects.json", name,
-		func(response []byte) (int, error) {
+func GetRoutingMethod(client softlayer.Client, key interface{}) (interface{}, error) {
+	getById, err := isInt(key)
+
+	if err != nil {
+		return -1, err
+	}
+
+	return getIdByName(client, "keyname", ROUTING_METHOD_NAME, "getAllObjects.json", key, getById,
+		func(response []byte) (interface{}, error) {
 			routingMethods := []datatypes.SoftLayer_Routing_Method{}
 
 			err := json.Unmarshal(response, &routingMethods)
@@ -86,18 +125,26 @@ func GetRoutingMethodByName(client softlayer.Client, name string) (int, error) {
 			}
 
 			for _, routingMethod := range routingMethods {
-				if routingMethod.KeyName == name {
+				if getById && routingMethod.Id == key.(int) {
+					return routingMethod.KeyName, nil
+				} else if !getById && routingMethod.KeyName == key.(string) {
 					return routingMethod.Id, nil
 				}
 			}
 
-			return -1, fmt.Errorf("Routing method %s not found", name)
+			return -1, fmt.Errorf("Routing method %s not found", key)
 		})
 }
 
-func GetHealthCheckTypeByName(client softlayer.Client, name string) (int, error) {
-	return getIdByName(client, "keyname", HEALTH_CHECK_TYPE_NAME, "getAllObjects.json", name,
-		func(response []byte) (int, error) {
+func GetHealthCheckType(client softlayer.Client, key interface{}) (interface{}, error) {
+	getById, err := isInt(key)
+
+	if err != nil {
+		return -1, err
+	}
+
+	return getIdByName(client, "keyname", HEALTH_CHECK_TYPE_NAME, "getAllObjects.json", key, getById,
+		func(response []byte) (interface{}, error) {
 			healthCheckTypes := []datatypes.SoftLayer_Health_Check_Type{}
 
 			err := json.Unmarshal(response, &healthCheckTypes)
@@ -106,11 +153,13 @@ func GetHealthCheckTypeByName(client softlayer.Client, name string) (int, error)
 			}
 
 			for _, healthCheckType := range healthCheckTypes {
-				if healthCheckType.KeyName == name {
+				if getById && healthCheckType.Id == key.(int) {
+					return healthCheckType.KeyName, nil
+				} else if !getById && healthCheckType.KeyName == key.(string) {
 					return healthCheckType.Id, nil
 				}
 			}
 
-			return -1, fmt.Errorf("Health check type %s not found", name)
+			return -1, fmt.Errorf("Health check type %s not found", key)
 		})
 }
