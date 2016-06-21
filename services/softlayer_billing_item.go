@@ -42,7 +42,12 @@ func (slbi *softLayer_Billing_Item_Service) CancelService(billingId int) (bool, 
 	return true, err
 }
 
-func (slbi *softLayer_Billing_Item_Service) CheckOrderStatus(receipt *data_types.SoftLayer_Container_Product_Order_Receipt, status string) (bool, data_types.SoftLayer_Billing_Order_Item, error) {
+// Checks the status of any order. Requires an order receipt.
+// Returns whether the order has been completely processed or not (true/false), along with
+// the billing order item, and an error.
+// You can also pass a list of target bill order statuses to look for. The function will return true if the bill order
+// status matches any of those, in addition of matching against 'COMPLETE', which is always the final order state.
+func (slbi *softLayer_Billing_Item_Service) CheckOrderStatus(receipt *data_types.SoftLayer_Container_Product_Order_Receipt, targetStatuses []string) (bool, data_types.SoftLayer_Billing_Order_Item, error) {
 	response, httpCode, err :=
 		slbi.client.GetHttpClient().DoRawHttpRequest(
 			fmt.Sprintf(
@@ -69,5 +74,18 @@ func (slbi *softLayer_Billing_Item_Service) CheckOrderStatus(receipt *data_types
 				"softlayer-go: Unmarshaling response from SoftLayer_Billing_Order_Item#getObject: %s", err))
 	}
 
-	return billingOrderItem.BillingItem.ProvisionTransaction.TransactionStatus.Name == status, billingOrderItem, nil
+	done := false
+	billOrderStatus := billingOrderItem.BillingItem.ProvisionTransaction.TransactionStatus.Name
+	for _, status := range targetStatuses {
+		if status == billOrderStatus {
+			done = true
+			break
+		}
+	}
+
+	if billOrderStatus == "COMPLETE" {
+		done = true
+	}
+
+	return done, billingOrderItem, nil
 }
