@@ -262,8 +262,12 @@ func (slnadclbs *softLayer_Load_Balancer) UpdateLoadBalancerService(lbId int, sg
 		Parameters: []datatypes.Softlayer_Load_Balancer_Virtual_Server_Parameters{{
 			VirtualServers: []*datatypes.Softlayer_Load_Balancer_Virtual_Server{{
 				Id:         virtualServer.Id,
+				Port:       virtualServer.Port,
+				Allocation: virtualServer.Allocation,
 				ServiceGroups: []*datatypes.Softlayer_Service_Group{{
 					Id:              sgId,
+					RoutingMethodId: virtualServer.ServiceGroups[0].RoutingMethodId,
+					RoutingTypeId:   virtualServer.ServiceGroups[0].RoutingTypeId,
 					Services:        []*datatypes.Softlayer_Service{{
 						Id: sId,
 						Enabled: 1,
