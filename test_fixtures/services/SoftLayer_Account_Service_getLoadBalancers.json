@@ -1,0 +1,34 @@
+[
+  {
+    "connectionLimit": 65000,
+    "id": 150585,
+    "ipAddressId": 28772116,
+    "securityCertificateId": null,
+    "sslEnabledFlag": true,
+    "highAvailabilityFlag": false,
+    "ipAddress": {
+      "ipAddress": "161.202.117.116"
+    },
+    "loadBalancerHardware": [
+      {
+        "accountId": 1,
+        "bareMetalInstanceFlag": 0,
+        "domain": "softlayer.com",
+        "fullyQualifiedDomainName": "lb05.tok02.softlayer.com",
+        "hardwareStatusId": 5,
+        "hostname": "lb05.tok02",
+        "id": 400712,
+        "notes": "",
+        "provisionDate": null,
+        "serviceProviderId": 1,
+        "serviceProviderResourceId": null,
+        "datacenter": {
+          "name": "ams01"
+        }
+      }
+    ],
+    "virtualServers": [
+
+    ]
+  }
+]

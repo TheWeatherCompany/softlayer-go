@@ -19,6 +19,8 @@ func (mock *MockProductPackageService) GetItemsByType(packageType string) ([]dat
 		response, _ = ReadJsonTestFixtures("services", "SoftLayer_Product_Package_getItemsByType_vpx.json")
 	case "VIRTUAL_SERVER_INSTANCE":
 		response, _ = ReadJsonTestFixtures("services", "SoftLayer_Product_Package_getItemsByType_virtual_server.json")
+	case "ADDITIONAL_SERVICES_LOAD_BALANCER":
+		response, _ = ReadJsonTestFixtures("services", "SoftLayer_Product_Package_getItemsByType_LoadBalancer.json")
 	}
 
 	productItems := []datatypes.SoftLayer_Product_Item{}

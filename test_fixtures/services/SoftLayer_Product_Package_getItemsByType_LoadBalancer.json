@@ -1,0 +1,811 @@
+[
+  {
+    "capacity": "65000",
+    "description": "Load Balancer (Dedicated, with SSL offload) - 15,000 Connections",
+    "id": 4136,
+    "keyName": "LOAD_BALANCER_DEDICATED_WITH_SSL_OFFLOAD_15000_CONNECTIONS",
+    "units": "N\/A",
+    "prices": [
+      {
+        "id": 25314,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82323,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82325,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82327,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82329,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82331,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 154095,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "capacity": "250",
+    "description": "Load Balancer 250 VIP Connections",
+    "id": 1106,
+    "keyName": "LOAD_BALANCER_250_VIP_CONNECTIONS",
+    "units": "Connections\/Second",
+    "prices": [
+      {
+        "id": 33908,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82163,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82165,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82167,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82169,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82171,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 154237,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "capacity": "65000",
+    "description": "Dedicated Load Balancer with High Availability and SSL - 15,000 Connections",
+    "id": 4512,
+    "keyName": "DEDICATED_LOAD_BALANCER_WITH_HIGH_AVAILABILITY_AND_SSL_15000_CONNECTIONS",
+    "units": "N\/A",
+    "prices": [
+      {
+        "id": 36019,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 80583,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 80585,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 80587,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 80589,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 80591,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 153937,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "capacity": "2500",
+    "description": "Load Balancer 2,500 VIP Connections",
+    "id": 1103,
+    "keyName": "LOAD_BALANCER_2500_VIP_CONNECTIONS",
+    "units": "Connections\/Second",
+    "prices": [
+      {
+        "id": 30681,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 86945,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 90193,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 90197,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 90199,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 86955,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 154889,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "capacity": "500",
+    "description": "Load Balancer 500 VIP Connections",
+    "id": 1105,
+    "keyName": "LOAD_BALANCER_500_VIP_CONNECTIONS",
+    "units": "Connections\/Second",
+    "prices": [
+      {
+        "id": 33416,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 99171,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 99173,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 99175,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 99177,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 99179,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 155633,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "capacity": "250",
+    "description": "Load Balancer 250 VIP Connections (with SSL offload)",
+    "id": 4125,
+    "keyName": "LOAD_BALANCER_250_VIP_CONNECTIONS_WITH_SSL_OFFLOAD",
+    "units": "Connections\/Second",
+    "prices": [
+      {
+        "id": 26774,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 90179,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 90181,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 90183,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 90185,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 90187,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 154817,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "capacity": "0",
+    "description": "International Services",
+    "id": 3955,
+    "keyName": "INTERNATIONAL_SERVICES",
+    "prices": [
+      {
+        "id": 32082,
+        "categories": [
+          {
+            "id": 315,
+            "name": "Surcharges"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "capacity": "1000",
+    "description": "Load Balancer 1,000 VIP Connections",
+    "id": 1104,
+    "keyName": "LOAD_BALANCER_1000_VIP_CONNECTIONS",
+    "units": "Connections\/Second",
+    "prices": [
+      {
+        "id": 35049,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 102463,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 102469,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 102471,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 102475,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 102477,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 156013,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "capacity": "500",
+    "description": "Load Balancer 500 VIP Connections (with SSL offload)",
+    "id": 4126,
+    "keyName": "LOAD_BALANCER_500_VIP_CONNECTIONS_WITH_SSL_OFFLOAD",
+    "units": "Connections\/Second",
+    "prices": [
+      {
+        "id": 31334,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 83893,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 83895,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 83897,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 83899,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 83901,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 154541,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "capacity": "1000",
+    "description": "Load Balancer 1,000 VIP Connections (with SSL offload)",
+    "id": 4127,
+    "keyName": "LOAD_BALANCER_1000_VIP_CONNECTIONS_WITH_SSL_OFFLOAD",
+    "units": "Connections\/Second",
+    "prices": [
+      {
+        "id": 32737,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 107939,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 107941,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 107943,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 107945,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 107947,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 156345,
+        "categories": [
+          {
+            "id": 55,
+            "name": "Proxy Load Balancer"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "capacity": "130000",
+    "description": "Dedicated Load Balancer with High Availability and SSL - 150,000 Connections",
+    "id": 4513,
+    "keyName": "DEDICATED_LOAD_BALANCER_WITH_HIGH_AVAILABILITY_AND_SSL_150000_CONNECTIONS",
+    "units": "N\/A",
+    "prices": [
+      {
+        "id": 36024,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82333,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82335,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82337,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82339,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 82341,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 154277,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "capacity": "130000",
+    "description": "Load Balancer (Dedicated, with SSL offload) - 150,000 Connections",
+    "id": 4163,
+    "keyName": "LOAD_BALANCER_DEDICATED_WITH_SSL_OFFLOAD_150000_CONNECTIONS",
+    "units": "N\/A",
+    "prices": [
+      {
+        "id": 30190,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 84013,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 84015,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 84017,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 84019,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 84021,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      },
+      {
+        "id": 154523,
+        "categories": [
+          {
+            "id": 328,
+            "name": "Dedicated Load Balancer"
+          }
+        ]
+      }
+    ]
+  }
+]
