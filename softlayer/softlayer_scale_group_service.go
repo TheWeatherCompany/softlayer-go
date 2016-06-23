@@ -8,5 +8,5 @@ type SoftLayer_Scale_Group_Service interface {
 	Service
 
 	CreateObject(template data_types.SoftLayer_Scale_Group) (data_types.SoftLayer_Scale_Group, error)
-	DeleteObject(scaleGroupId int) (bool, error)
+	ForceDeleteObject(scaleGroupId int) (bool, error)
 }
