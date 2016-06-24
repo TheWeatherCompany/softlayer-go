@@ -6,10 +6,10 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	slclientfakes "github.com/maximilien/softlayer-go/client/fakes"
-	datatypes "github.com/maximilien/softlayer-go/data_types"
-	softlayer "github.com/maximilien/softlayer-go/softlayer"
-	testhelpers "github.com/maximilien/softlayer-go/test_helpers"
+	slclientfakes "github.com/TheWeatherCompany/softlayer-go/client/fakes"
+	datatypes "github.com/TheWeatherCompany/softlayer-go/data_types"
+	softlayer "github.com/TheWeatherCompany/softlayer-go/softlayer"
+	testhelpers "github.com/TheWeatherCompany/softlayer-go/test_helpers"
 )
 
 var _ = Describe("SoftLayer_Virtual_Guest_Block_Device_Template_Group_Service", func() {
@@ -774,6 +774,41 @@ var _ = Describe("SoftLayer_Virtual_Guest_Block_Device_Template_Group_Service", 
 						Expect(err).To(HaveOccurred())
 					}
 				})
+			})
+		})
+	})
+
+	Context("#GetGlobalIdentifier", func() {
+		BeforeEach(func() {
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("services", "SoftLayer_Virtual_Guest_Block_Device_Template_Group_Service_getGlobalIdentifier.json")
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("successfully gets global identifier for a VGDTG", func() {
+			globalIdentifier, err := vgbdtgService.GetGlobalIdentifier(vgbdtGroup.Id)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(globalIdentifier).To(Equal("4f48b668-ba04-46bc-b9cd-c3543aacedc2"))
+		})
+
+		Context("when HTTP client returns error codes 40x or 50x", func() {
+			It("fails for error code 40x", func() {
+				errorCodes := []int{400, 401, 499}
+				for _, errorCode := range errorCodes {
+					fakeClient.FakeHttpClient.DoRawHttpRequestInt = errorCode
+
+					_, err := vgbdtgService.GetGlobalIdentifier(vgbdtGroup.Id)
+					Expect(err).To(HaveOccurred())
+				}
+			})
+
+			It("fails for error code 50x", func() {
+				errorCodes := []int{500, 501, 599}
+				for _, errorCode := range errorCodes {
+					fakeClient.FakeHttpClient.DoRawHttpRequestInt = errorCode
+
+					_, err := vgbdtgService.GetGlobalIdentifier(vgbdtGroup.Id)
+					Expect(err).To(HaveOccurred())
+				}
 			})
 		})
 	})

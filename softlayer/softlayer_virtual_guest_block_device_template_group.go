@@ -1,7 +1,7 @@
 package softlayer
 
 import (
-	datatypes "github.com/maximilien/softlayer-go/data_types"
+	datatypes "github.com/TheWeatherCompany/softlayer-go/data_types"
 )
 
 type SoftLayer_Virtual_Guest_Block_Device_Template_Group_Service interface {
@@ -27,6 +27,8 @@ type SoftLayer_Virtual_Guest_Block_Device_Template_Group_Service interface {
 	GetImageTypeKeyName(id int) (string, error)
 
 	GetTransaction(id int) (datatypes.SoftLayer_Provisioning_Version1_Transaction, error)
+
+	GetGlobalIdentifier(id int) (string, error)
 
 	PermitSharingAccess(id int, accountId int) (bool, error)
 
