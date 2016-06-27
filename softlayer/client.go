@@ -25,6 +25,7 @@ type Client interface {
 	GetSoftLayer_Dns_Domain_ResourceRecord_Service() (SoftLayer_Dns_Domain_ResourceRecord_Service, error)
 	GetSoftLayer_Security_Certificate_Service() (SoftLayer_Security_Certificate_Service, error)
 	GetSoftLayer_Scale_Group_Service() (SoftLayer_Scale_Group_Service, error)
+	GetSoftLayer_Scale_Policy_Service() (SoftLayer_Scale_Policy_Service, error)
 
 	GetHttpClient() HttpClient
 }
