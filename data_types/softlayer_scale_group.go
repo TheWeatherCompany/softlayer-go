@@ -19,10 +19,6 @@ type SoftLayer_Scale_Group struct {
 	VirtualGuestMemberTemplate SoftLayer_Virtual_Guest_Template    `json:"virtualGuestMemberTemplate,omitempty"`
 }
 
-type SoftLayer_Location_Group_Regional struct {
-	Name string `json:"name,omitempty"`
-}
-
 type SoftLayer_Scale_Termination_Policy struct {
 	KeyName string `json:"keyName,omitempty"`
 }

@@ -1,13 +1,13 @@
 package services
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"github.com/TheWeatherCompany/softlayer-go/common"
 	"github.com/TheWeatherCompany/softlayer-go/data_types"
 	"github.com/TheWeatherCompany/softlayer-go/softlayer"
-	"encoding/json"
-	"fmt"
-	"bytes"
-	"github.com/TheWeatherCompany/softlayer-go/common"
-	"errors"
 	"log"
 )
 
