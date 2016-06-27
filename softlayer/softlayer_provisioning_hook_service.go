@@ -9,5 +9,6 @@ type SoftLayer_Provisioning_Hook_Service interface {
 
 	CreateProvisioningHook(template datatypes.SoftLayer_Provisioning_Hook_Template) (datatypes.SoftLayer_Provisioning_Hook, error)
 	GetObject(id int) (datatypes.SoftLayer_Provisioning_Hook, error)
+	EditObject(id int, template datatypes.SoftLayer_Provisioning_Hook_Template) (bool, error)
 	DeleteObject(id int) (bool, error)
 }

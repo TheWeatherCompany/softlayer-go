@@ -20,7 +20,7 @@ import (
 
 	slclient "github.com/TheWeatherCompany/softlayer-go/client"
 	datatypes "github.com/TheWeatherCompany/softlayer-go/data_types"
-	softlayer "github.com/TheWeatherCompany/softlayer-go/softlayer"
+	"github.com/TheWeatherCompany/softlayer-go/softlayer"
 )
 
 var (
@@ -670,6 +670,62 @@ func GetVirtualGuestPrimaryIpAddress(virtualGuestId int) string {
 	Expect(err).ToNot(HaveOccurred())
 
 	return vgIpAddress
+}
+
+func CreateProvisioningHookService() (softlayer.SoftLayer_Provisioning_Hook_Service, error) {
+	username, apiKey, err := GetUsernameAndApiKey()
+	if err != nil {
+		return nil, err
+	}
+
+	client := slclient.NewSoftLayerClient(username, apiKey)
+	provisioningHookService, err := client.GetSoftLayer_Provisioning_Hook_Service()
+	if err != nil {
+		return nil, err
+	}
+
+	return provisioningHookService, nil
+}
+
+func CreateTestProvisioningHook() (datatypes.SoftLayer_Provisioning_Hook, error) {
+	provisioningHook := datatypes.SoftLayer_Provisioning_Hook_Template{
+		Name:   "TWCTestHook",
+		TypeId: 1,
+		Uri:    "http://www.weather.com",
+	}
+
+	provisioningHookService, err := CreateProvisioningHookService()
+	Expect(err).ToNot(HaveOccurred())
+
+	fmt.Printf("----> creating Provisioning Hook in SL\n")
+	createdProvisioningHook, err := provisioningHookService.CreateProvisioningHook(provisioningHook)
+	Expect(err).ToNot(HaveOccurred())
+
+	Expect(createdProvisioningHook.Name).To(Equal(provisioningHook.Name), "name")
+	Expect(createdProvisioningHook.TypeId).To(BeNumerically("==", 1), "typeId")
+	Expect(createdProvisioningHook.Id).To(BeNumerically(">", 0), "id")
+	Expect(createdProvisioningHook.Uri).To(Equal(provisioningHook.Uri), "uri")
+	Expect(createdProvisioningHook.CreateDate).ToNot(BeNil(), "createDate")
+	Expect(createdProvisioningHook.ModifyDate).ToNot(BeNil(), "modifyDate")
+	fmt.Printf("----> created Provisioning Hook: %d\n in SL", createdProvisioningHook.Id)
+
+	return createdProvisioningHook, nil
+}
+
+func WaitForCreatedProvisioningHookToBePresent(provisioningHookId int) {
+	provisioningHookService, err := CreateProvisioningHookService()
+	Expect(err).ToNot(HaveOccurred())
+
+	fmt.Printf("----> waiting for created provisioning hook to be present\n")
+	Eventually(func() bool {
+		provisioningHook, err := provisioningHookService.GetObject(provisioningHookId)
+		Expect(err).ToNot(HaveOccurred())
+
+		if provisioningHook.Id == provisioningHookId {
+			return true
+		}
+		return false
+	}, TIMEOUT, POLLING_INTERVAL).Should(BeTrue(), "failed to create provisioning hook")
 }
 
 func CreateDnsDomainService() (softlayer.SoftLayer_Dns_Domain_Service, error) {

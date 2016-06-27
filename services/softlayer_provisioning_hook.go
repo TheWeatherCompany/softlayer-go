@@ -31,7 +31,7 @@ func (slphs *softLayer_Provisioning_Hook_Service) CreateProvisioningHook(templat
 		return datatypes.SoftLayer_Provisioning_Hook{}, err
 	}
 
-	parameters := datatypes.SoftLayer_Provisioning_Hook_Parameters{
+	parameters := datatypes.SoftLayer_Provisioning_Hook_Template_Parameters{
 		Parameters: []datatypes.SoftLayer_Provisioning_Hook_Template{
 			template,
 		},
@@ -63,7 +63,7 @@ func (slphs *softLayer_Provisioning_Hook_Service) CreateProvisioningHook(templat
 	return provisioningHook, nil
 }
 
-func (slvgs *softLayer_Provisioning_Hook_Service) checkCreateObjectRequiredValues(template datatypes.SoftLayer_Provisioning_Hook_Template) error {
+func (slphs *softLayer_Provisioning_Hook_Service) checkCreateObjectRequiredValues(template datatypes.SoftLayer_Provisioning_Hook_Template) error {
 	var err error
 	errorMessage, errorTemplate := "", "* %s is required and cannot be empty\n"
 
@@ -105,6 +105,35 @@ func (slphs *softLayer_Provisioning_Hook_Service) GetObject(id int) (datatypes.S
 	}
 
 	return provisioningHook, nil
+}
+
+func (slphs *softLayer_Provisioning_Hook_Service) EditObject(id int, template datatypes.SoftLayer_Provisioning_Hook_Template) (bool, error) {
+	parameters := datatypes.SoftLayer_Provisioning_Hook_Template_Parameters{
+		Parameters: []datatypes.SoftLayer_Provisioning_Hook_Template{
+			template,
+		},
+	}
+
+	requestBody, err := json.Marshal(parameters)
+	if err != nil {
+		return false, err
+	}
+
+	response, errorCode, err := slphs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/editObject.json", slphs.GetName(), id), "POST", bytes.NewBuffer(requestBody))
+	if err != nil {
+		return false, err
+	}
+
+	if res := string(response[:]); res != "true" {
+		return false, errors.New(fmt.Sprintf("Failed to edit Provisioning Hook with id: %d, got '%s' as response from the API.", id, res))
+	}
+
+	if common.IsHttpErrorCode(errorCode) {
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Provisioning_Hook, HTTP error code: '%d'", errorCode)
+		return false, errors.New(errorMessage)
+	}
+
+	return true, err
 }
 
 func (slphs *softLayer_Provisioning_Hook_Service) DeleteObject(id int) (bool, error) {

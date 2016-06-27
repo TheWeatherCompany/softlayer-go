@@ -40,7 +40,6 @@ var _ = Describe("SoftLayer_Provisioning_Hook_Service", func() {
 		Expect(provisioningHookService).ToNot(BeNil())
 
 		provisioningHook = datatypes.SoftLayer_Provisioning_Hook{}
-		provisioningHookTemplate = datatypes.SoftLayer_Provisioning_Hook_Template{}
 	})
 
 	Context("#GetName", func() {
@@ -94,6 +93,51 @@ var _ = Describe("SoftLayer_Provisioning_Hook_Service", func() {
 				for _, errorCode := range errorCodes {
 					fakeClient.FakeHttpClient.DoRawHttpRequestInt = errorCode
 					_, err = provisioningHookService.CreateProvisioningHook(provisioningHookTemplate)
+					Expect(err).To(HaveOccurred())
+				}
+			})
+		})
+	})
+
+	Context("#EditObject", func() {
+		BeforeEach(func() {
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("services", "SoftLayer_Provisioning_Hook_Service_editObject.json")
+
+		})
+
+		It("edits an existing provisioning hook", func() {
+			provisioningHookTemplate = datatypes.SoftLayer_Provisioning_Hook_Template{
+				Name: "edited-name",
+				Uri:  "http://test.provision-script.net/provision.sh",
+			}
+			result, err := provisioningHookService.EditObject(provisioningHook.Id, provisioningHookTemplate)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(result).To(BeTrue())
+		})
+
+		Context("when HTTP client returns error codes 40x or 50x", func() {
+			It("fails for error code 40x", func() {
+				errorCodes := []int{400, 401, 499}
+				for _, errorCode := range errorCodes {
+					fakeClient.FakeHttpClient.DoRawHttpRequestInt = errorCode
+
+					edited := datatypes.SoftLayer_Provisioning_Hook_Template{
+						Name: "edited-name",
+					}
+					_, err := provisioningHookService.EditObject(provisioningHook.Id, edited)
+					Expect(err).To(HaveOccurred())
+				}
+			})
+
+			It("fails for error code 50x", func() {
+				errorCodes := []int{500, 501, 599}
+				for _, errorCode := range errorCodes {
+					fakeClient.FakeHttpClient.DoRawHttpRequestInt = errorCode
+
+					edited := datatypes.SoftLayer_Provisioning_Hook_Template{
+						Name: "edited-name",
+					}
+					_, err := provisioningHookService.EditObject(provisioningHook.Id, edited)
 					Expect(err).To(HaveOccurred())
 				}
 			})
