@@ -222,6 +222,15 @@ func (fslc *FakeSoftLayerClient) GetSoftLayer_Provisioning_Hook_Service() (softl
 	return slService.(softlayer.SoftLayer_Provisioning_Hook_Service), nil
 }
 
+func (slc *FakeSoftLayerClient) GetSoftLayer_Load_Balancer_Service() (softlayer.SoftLayer_Load_Balancer_Service, error) {
+	slService, err := slc.GetService("SoftLayer_Load_Balancer_Service")
+	if err != nil {
+		return nil, err
+	}
+
+	return slService.(softlayer.SoftLayer_Load_Balancer_Service), nil
+}
+
 //Public methods
 func (fslc *FakeSoftLayerClient) DoRawHttpRequestWithObjectMask(path string, masks []string, requestType string, requestBody *bytes.Buffer) ([]byte, error) {
 	fslc.DoRawHttpRequestPath = path
@@ -327,5 +336,4 @@ func (fslc *FakeSoftLayerClient) initSoftLayerServices() {
 	fslc.SoftLayerServices["SoftLayer_Network_Application_Delivery_Controller_Service"] = services.NewSoftLayer_Network_Application_Delivery_Controller_Service(fslc)
 	fslc.SoftLayerServices["SoftLayer_Dns_Domain_ResourceRecord"] = services.NewSoftLayer_Dns_Domain_ResourceRecord_Service(fslc)
 	fslc.SoftLayerServices["SoftLayer_Security_Certificate"] = services.NewSoftLayer_Security_Certificate_Service(fslc)
-	fslc.SoftLayerServices["SoftLayer_Provisioning_Hook"] = services.NewSoftLayer_Provisioning_Hook_Service(fslc)
 }

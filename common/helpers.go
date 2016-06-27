@@ -19,10 +19,10 @@ const (
 type lookup func([]byte) (int, error)
 
 func getIdByName(client softlayer.Client, nameMask string, nameType string, nameTypeGet string, name string, lookupFunc lookup) (int, error) {
-	ObjectFilter := string(`{"name":{"operation":"` + name + `"}}`)
+	ObjectFilter := string(`{"` + nameMask + `":{"operation":"` + name + `"}}`)
 	ObjectMasks := []string{"id", nameMask}
 
-	response, errorCode, err := client.GetHttpClient().DoRawHttpRequestWithObjectFilterAndObjectMask(fmt.Sprintf("%s/%s.json", DATACENTER_TYPE_NAME, nameTypeGet), ObjectMasks, ObjectFilter, "GET", new(bytes.Buffer))
+	response, errorCode, err := client.GetHttpClient().DoRawHttpRequestWithObjectFilterAndObjectMask(fmt.Sprintf("%s/%s", nameType, nameTypeGet), ObjectMasks, ObjectFilter, "GET", new(bytes.Buffer))
 	if err != nil {
 		return -1, err
 	}

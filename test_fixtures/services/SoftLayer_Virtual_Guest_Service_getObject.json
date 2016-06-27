@@ -44,5 +44,19 @@
 	},
     "userData": [{
 	    "value": "some user data $_/<| with special characters"
-	}]
+	}],
+	"primaryNetworkComponent": {
+		"primaryIpAddressRecord": {
+			"guestNetworkComponentBinding": {
+				"ipAddressId": 87654321
+			}
+		}
+	},
+	"primaryBackendNetworkComponent": {
+		"primaryIpAddressRecord": {
+			"guestNetworkComponentBinding": {
+				"ipAddressId": 8765432
+			}
+		}
+	}
 }

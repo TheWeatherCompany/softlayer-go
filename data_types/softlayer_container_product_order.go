@@ -21,6 +21,10 @@ type SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller_P
 	Parameters []SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller `json:"parameters"`
 }
 
+type SoftLayer_Container_Product_Order_Load_Balancer_Parameters struct {
+	Parameters []SoftLayer_Container_Product_Order_Load_Balancer `json:"parameters"`
+}
+
 //http://sldn.softlayer.com/reference/datatypes/SoftLayer_Container_Product_Order
 type SoftLayer_Container_Product_Order struct {
 	ComplexType   string                         `json:"complexType"`
@@ -59,6 +63,15 @@ type SoftLayer_Container_Product_Order_Virtual_Guest_Upgrade struct {
 type SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller struct {
 	ComplexType string                         `json:"complexType"`
 	Location    string                         `json:"location,omitempty"`
+	PackageId   int                            `json:"packageId"`
+	Prices      []SoftLayer_Product_Item_Price `json:"prices,omitempty"`
+	Properties  []Property                     `json:"properties,omitempty"`
+	Quantity    int                            `json:"quantity,omitempty"`
+}
+
+type SoftLayer_Container_Product_Order_Load_Balancer struct {
+	ComplexType string                         `json:"complexType"`
+	Location    int                            `json:"location,omitempty"`
 	PackageId   int                            `json:"packageId"`
 	Prices      []SoftLayer_Product_Item_Price `json:"prices,omitempty"`
 	Properties  []Property                     `json:"properties,omitempty"`
