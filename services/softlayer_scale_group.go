@@ -91,6 +91,49 @@ func (slsgs *softlayer_Scale_Group_Service) CreateObject(template data_types.Sof
 	return softLayer_Scale_Group, nil
 }
 
+func (slsgs *softlayer_Scale_Group_Service) GetObject(groupId int) (data_types.SoftLayer_Scale_Group, error) {
+	objectMask := []string{
+		"id",
+		"name",
+		"minimumMemberCount",
+		"maximumMemberCount",
+		"cooldown",
+		"regionalGroup.id",
+		"regionalGroup.name",
+		"terminationPolicy.name",
+		"virtualGuestMemberTemplate",
+		"loadBalancers.id",
+		"loadBalancers.port",
+		"loadBalancers.virtualServerId",
+		"loadBalancers.healthCheck.id",
+		"loadBalancers.healthCheck.healthCheckTypeId",
+		"loadBalancers.healthCheck.name",
+		"loadBalancers.healthCheck.attributes.value",
+		"loadBalancers.healthCheck.attributes.type.id",
+		"loadBalancers.healthCheck.attributes.type.keyname",
+	}
+
+	response, errorCode, err := slsgs.client.GetHttpClient().DoRawHttpRequestWithObjectMask(fmt.Sprintf("%s/%d/getObject.json", slsgs.GetName(), groupId), objectMask, "GET", new(bytes.Buffer))
+	if err != nil {
+		return data_types.SoftLayer_Scale_Group{}, err
+	}
+
+	if common.IsHttpErrorCode(errorCode) {
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Scale_Group#getObject, HTTP error code: '%d'", errorCode)
+		return data_types.SoftLayer_Scale_Group{}, errors.New(errorMessage)
+	}
+
+	log.Printf("[INFO]  ***** response json: %s", response)
+
+	group := data_types.SoftLayer_Scale_Group{}
+	err = json.Unmarshal(response, &group)
+	if err != nil {
+		return data_types.SoftLayer_Scale_Group{}, err
+	}
+
+	return group, nil
+}
+
 func (slsgs *softlayer_Scale_Group_Service) ForceDeleteObject(group int) (bool, error) {
 	response, errorCode, err := slsgs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/forceDeleteObject", slsgs.GetName(), group), "GET", new(bytes.Buffer))
 	if err != nil {
