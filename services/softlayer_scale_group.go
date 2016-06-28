@@ -26,15 +26,34 @@ func (slsgs *softlayer_Scale_Group_Service) GetName() string {
 }
 
 func (slsgs *softlayer_Scale_Group_Service) CreateObject(template data_types.SoftLayer_Scale_Group) (data_types.SoftLayer_Scale_Group, error) {
-	// Replace the regionalGroup sub-structure with the regionalGroupId from a lookup
-	// This seems to have a higher success rate for this particular API
-	locationGroupRegionalId, err := common.GetLocationGroupRegional(slsgs.client, template.RegionalGroup.Name)
-	if err != nil {
-		return data_types.SoftLayer_Scale_Group{},
-			fmt.Errorf("Error while looking up regionalGroupId from name [%s]: %s", template.RegionalGroup.Name, err)
+
+	if template.RegionalGroup != nil && template.RegionalGroup.Name != "" {
+		// Replace the regionalGroup sub-structure with the regionalGroupId from a lookup
+		// This seems to have a higher success rate for this particular API
+		locationGroupRegionalId, err := common.GetLocationGroupRegional(slsgs.client, template.RegionalGroup.Name)
+		if err != nil {
+			return data_types.SoftLayer_Scale_Group{},
+				fmt.Errorf("Error while looking up regionalGroupId from name [%s]: %s", template.RegionalGroup.Name, err)
+		}
+		template.RegionalGroupId = locationGroupRegionalId.(int)
+		template.RegionalGroup = nil
 	}
-	template.RegionalGroupId = locationGroupRegionalId.(int)
-	template.RegionalGroup = nil
+
+	for _, elem := range template.LoadBalancers {
+		if elem.HealthCheck != nil && elem.HealthCheck.Name != "" {
+			// Replace the health check name with id
+			healthCheckId, err := common.GetHealthCheckType(slsgs.client, elem.HealthCheck.Name)
+			if err != nil {
+				return data_types.SoftLayer_Scale_Group{},
+					fmt.Errorf(
+						"Error while looking up healthCheckId from name [%s]: %s",
+						elem.HealthCheck.Name,
+						err)
+			}
+			elem.HealthCheck.HealthCheckTypeId = healthCheckId.(int)
+			elem.HealthCheck.Name = ""
+		}
+	}
 
 	parameters := data_types.SoftLayer_Scale_Group_Parameters{
 		Parameters: []interface{}{
