@@ -11,7 +11,7 @@ type SoftLayer_Health_Check struct {
 	Attributes        []SoftLayer_Health_Check_Attribute `json:"attributes,omitempty"`
 	Id                int                                `json:"id,omitempty"`
 	HealthCheckTypeId int                                `json:"healthCheckTypeId,omitempty"`
-	Name              string                             `json:"name,omitempty"`
+	Type              SoftLayer_Health_Check_Type        `json:"type,omitempty"`
 }
 
 type SoftLayer_Health_Check_Attribute struct {

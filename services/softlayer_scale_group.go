@@ -39,22 +39,6 @@ func (slsgs *softlayer_Scale_Group_Service) CreateObject(template data_types.Sof
 		template.RegionalGroup = nil
 	}
 
-	for _, elem := range template.LoadBalancers {
-		if elem.HealthCheck != nil && elem.HealthCheck.Name != "" {
-			// Replace the health check name with id
-			healthCheckId, err := common.GetHealthCheckType(slsgs.client, elem.HealthCheck.Name)
-			if err != nil {
-				return data_types.SoftLayer_Scale_Group{},
-					fmt.Errorf(
-						"Error while looking up healthCheckId from name [%s]: %s",
-						elem.HealthCheck.Name,
-						err)
-			}
-			elem.HealthCheck.HealthCheckTypeId = healthCheckId.(int)
-			elem.HealthCheck.Name = ""
-		}
-	}
-
 	parameters := data_types.SoftLayer_Scale_Group_Parameters{
 		Parameters: []interface{}{
 			template,
@@ -107,7 +91,7 @@ func (slsgs *softlayer_Scale_Group_Service) GetObject(groupId int) (data_types.S
 		"loadBalancers.virtualServerId",
 		"loadBalancers.healthCheck.id",
 		"loadBalancers.healthCheck.healthCheckTypeId",
-		"loadBalancers.healthCheck.name",
+		"loadBalancers.healthCheck.type.keyname",
 		"loadBalancers.healthCheck.attributes.value",
 		"loadBalancers.healthCheck.attributes.type.id",
 		"loadBalancers.healthCheck.attributes.type.keyname",
