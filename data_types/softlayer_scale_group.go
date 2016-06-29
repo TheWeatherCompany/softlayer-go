@@ -14,13 +14,10 @@ type SoftLayer_Scale_Group struct {
 	NetworkVlans               []SoftLayer_Scale_Network_Vlan      `json:"networkVlans,omitempty"`
 	Policies                   []SoftLayer_Scale_Policy            `json:"policies,omitempty"`
 	RegionalGroup              *SoftLayer_Location_Group_Regional  `json:"regionalGroup,omitempty"`
+	RegionalGroupId            int                                 `json:"regionalGroupId,omitempty"`
 	SuspendedFlag              bool                                `json:"suspendedFlag"`
 	TerminationPolicy          *SoftLayer_Scale_Termination_Policy `json:"terminationPolicy,omitempty"`
 	VirtualGuestMemberTemplate SoftLayer_Virtual_Guest_Template    `json:"virtualGuestMemberTemplate,omitempty"`
-}
-
-type SoftLayer_Location_Group_Regional struct {
-	Name string `json:"name,omitempty"`
 }
 
 type SoftLayer_Scale_Termination_Policy struct {

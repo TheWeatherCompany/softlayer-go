@@ -82,6 +82,19 @@ var _ = Describe("SoftlayerLookupHelpers", func() {
 		})
 	})
 
+	Context("#GetLocationGroupRegionalsByName", func() {
+		BeforeEach(func() {
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetLocationGroupRegionalByName.json")
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("sucessfully retrieves ID of location group regional", func() {
+			id, err := common.GetLocationGroupRegional(fakeClient, "na-usa-west-1")
+			Expect(err).ToNot(HaveOccurred())
+			Expect(id).To(Equal(62))
+		})
+	})
+
 	Context("#GetDatacenterById", func() {
 		BeforeEach(func() {
 			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetDatacenterById.json")
@@ -131,6 +144,19 @@ var _ = Describe("SoftlayerLookupHelpers", func() {
 			id, err := common.GetHealthCheckType(fakeClient, 3)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(id).To(Equal("DNS"))
+		})
+	})
+
+	Context("#GetLocationGroupRegionalsById", func() {
+		BeforeEach(func() {
+			fakeClient.FakeHttpClient.DoRawHttpRequestResponse, err = testhelpers.ReadJsonTestFixtures("common", "GetLocationGroupRegionalById.json")
+			Expect(err).ToNot(HaveOccurred())
+		})
+
+		It("sucessfully retrieves name of Location group regional", func() {
+			id, err := common.GetLocationGroupRegional(fakeClient, 62)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(id).To(Equal("na-usa-west-1"))
 		})
 	})
 })

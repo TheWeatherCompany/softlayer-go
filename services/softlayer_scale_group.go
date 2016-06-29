@@ -1,13 +1,13 @@
 package services
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"github.com/TheWeatherCompany/softlayer-go/common"
 	"github.com/TheWeatherCompany/softlayer-go/data_types"
 	"github.com/TheWeatherCompany/softlayer-go/softlayer"
-	"encoding/json"
-	"fmt"
-	"bytes"
-	"github.com/TheWeatherCompany/softlayer-go/common"
-	"errors"
 	"log"
 )
 
@@ -26,6 +26,16 @@ func (slsgs *softlayer_Scale_Group_Service) GetName() string {
 }
 
 func (slsgs *softlayer_Scale_Group_Service) CreateObject(template data_types.SoftLayer_Scale_Group) (data_types.SoftLayer_Scale_Group, error) {
+	// Replace the regionalGroup sub-structure with the regionalGroupId from a lookup
+	// This seems to have a higher success rate for this particular API
+	locationGroupRegionalId, err := common.GetLocationGroupRegional(slsgs.client, template.RegionalGroup.Name)
+	if err != nil {
+		return data_types.SoftLayer_Scale_Group{},
+			fmt.Errorf("Error while looking up regionalGroupId from name [%s]: %s", template.RegionalGroup.Name, err)
+	}
+	template.RegionalGroupId = locationGroupRegionalId.(int)
+	template.RegionalGroup = nil
+
 	parameters := data_types.SoftLayer_Scale_Group_Parameters{
 		Parameters: []interface{}{
 			template,
