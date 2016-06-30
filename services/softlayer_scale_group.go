@@ -84,7 +84,7 @@ func (slsgs *softlayer_Scale_Group_Service) GetObject(groupId int) (data_types.S
 		"cooldown",
 		"regionalGroup.id",
 		"regionalGroup.name",
-		"terminationPolicy.name",
+		"terminationPolicy.keyName",
 		"virtualGuestMemberTemplate",
 		"loadBalancers.id",
 		"loadBalancers.port",
