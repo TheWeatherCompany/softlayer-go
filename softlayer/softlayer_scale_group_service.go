@@ -9,5 +9,6 @@ type SoftLayer_Scale_Group_Service interface {
 
 	CreateObject(template data_types.SoftLayer_Scale_Group) (data_types.SoftLayer_Scale_Group, error)
 	GetObject(groupId int) (data_types.SoftLayer_Scale_Group, error)
+	EditObject(groupId int, template data_types.SoftLayer_Scale_Group) (bool, error)
 	ForceDeleteObject(scaleGroupId int) (bool, error)
 }
