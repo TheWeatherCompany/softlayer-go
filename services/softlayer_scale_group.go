@@ -118,6 +118,36 @@ func (slsgs *softlayer_Scale_Group_Service) GetObject(groupId int) (data_types.S
 	return group, nil
 }
 
+func (slsgs *softlayer_Scale_Group_Service) EditObject(groupId int, template data_types.SoftLayer_Scale_Group) (bool, error) {
+	parameters := data_types.SoftLayer_Scale_Group_Parameters{
+		Parameters: []interface{}{
+			template,
+		},
+	}
+
+	requestBody, err := json.Marshal(parameters)
+	log.Printf("[INFO]  ***** request body: %s", requestBody)
+	if err != nil {
+		return false, err
+	}
+
+	response, errorCode, err := slsgs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/editObject.json", slsgs.GetName(), groupId), "POST", bytes.NewBuffer(requestBody))
+	if err != nil {
+		return false, err
+	}
+
+	if res := string(response[:]); res != "true" {
+		return false, errors.New(fmt.Sprintf("Failed to edit SoftLayer Scale Group with id: %d, got '%s' as response from the API.", groupId, res))
+	}
+
+	if common.IsHttpErrorCode(errorCode) {
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Scale_Group#editObject, HTTP error code: '%d'", errorCode)
+		return false, errors.New(errorMessage)
+	}
+
+	return true, err
+}
+
 func (slsgs *softlayer_Scale_Group_Service) ForceDeleteObject(group int) (bool, error) {
 	response, errorCode, err := slsgs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/forceDeleteObject", slsgs.GetName(), group), "GET", new(bytes.Buffer))
 	if err != nil {
