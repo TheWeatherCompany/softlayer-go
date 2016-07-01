@@ -26,6 +26,7 @@ type Client interface {
 	GetSoftLayer_Security_Certificate_Service() (SoftLayer_Security_Certificate_Service, error)
 	GetSoftLayer_Scale_Group_Service() (SoftLayer_Scale_Group_Service, error)
 	GetSoftLayer_Scale_Policy_Service() (SoftLayer_Scale_Policy_Service, error)
+	GetSoftLayer_Scale_Policy_Trigger_Service() (SoftLayer_Scale_Policy_Trigger_Service, error)
 
 	GetHttpClient() HttpClient
 }

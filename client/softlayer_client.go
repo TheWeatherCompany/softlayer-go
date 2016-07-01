@@ -93,6 +93,15 @@ func (slc *SoftLayerClient) GetSoftLayer_Scale_Policy_Service() (softlayer.SoftL
 	return slService.(softlayer.SoftLayer_Scale_Policy_Service), nil
 }
 
+func (slc *SoftLayerClient) GetSoftLayer_Scale_Policy_Trigger_Service() (softlayer.SoftLayer_Scale_Policy_Trigger_Service, error) {
+	slService, err := slc.GetService("SoftLayer_Scale_Policy_Trigger")
+	if err != nil {
+		return nil, err
+	}
+
+	return slService.(softlayer.SoftLayer_Scale_Policy_Trigger_Service), nil
+}
+
 func (slc *SoftLayerClient) GetSoftLayer_Virtual_Guest_Service() (softlayer.SoftLayer_Virtual_Guest_Service, error) {
 	slService, err := slc.GetService("SoftLayer_Virtual_Guest")
 	if err != nil {
@@ -296,6 +305,7 @@ func (slc *SoftLayerClient) initSoftLayerServices() {
 	slc.softLayerServices["SoftLayer_User_Customer"] = services.NewSoftLayer_User_Customer_Service(slc)
 	slc.softLayerServices["SoftLayer_Scale_Group"] = services.NewSoftLayer_Scale_Group_Service(slc)
 	slc.softLayerServices["SoftLayer_Scale_Policy"] = services.NewSoftLayer_Scale_Policy_Service(slc)
+	slc.softLayerServices["SoftLayer_Scale_Policy_Trigger"] = services.NewSoftLayer_Scale_Policy_Trigger_Service(slc)
 }
 
 func (slc *SoftLayerClient) makeHttpRequest(url string, requestType string, requestBody *bytes.Buffer) ([]byte, error) {
