@@ -26,6 +26,7 @@ type Client interface {
 	GetSoftLayer_Security_Certificate_Service() (SoftLayer_Security_Certificate_Service, error)
 	GetSoftLayer_Scale_Group_Service() (SoftLayer_Scale_Group_Service, error)
 	GetSoftLayer_Scale_Policy_Service() (SoftLayer_Scale_Policy_Service, error)
+	GetSoftLayer_Scale_Policy_Trigger_Service() (SoftLayer_Scale_Policy_Trigger_Service, error)
 	GetSoftLayer_Load_Balancer_Service() (SoftLayer_Load_Balancer_Service, error)
 	GetSoftLayer_Load_Balancer_Service_Group_Service() (SoftLayer_Load_Balancer_Service_Group_Service, error)
 	GetSoftLayer_Provisioning_Hook_Service() (SoftLayer_Provisioning_Hook_Service, error)

@@ -2,6 +2,11 @@ package data_types
 
 import "time"
 
+const (
+	SOFTLAYER_SCALE_POLICY_TRIGGER_TYPE_ID_REPEATING = 2
+	SOFTLAYER_SCALE_POLICY_TRIGGER_TYPE_ID_ONE_TIME = 3
+	SOFTLAYER_SCALE_POLICY_TRIGGER_TYPE_ID_RESOURCE_USE = 1
+)
 type SoftLayer_Scale_Policy_Parameters struct {
 	Parameters []SoftLayer_Scale_Policy `json:"parameters"`
 }
@@ -52,10 +57,10 @@ type SoftLayer_Scale_Policy_Trigger_ResourceUse struct {
 }
 
 type SoftLayer_Scale_Policy_Trigger_ResourceUse_Watch struct {
-	Id       int     `json:"id,omitempty"`
-	Metric   string  `json:"metric,omitempty"`
-	Operator string  `json:"operator,omitempty"`
-	Period   int     `json:"period,omitempty"`
-	Value    string  `json:"value,omitempty"`
+	Id        int    `json:"id,omitempty"`
+	Metric    string `json:"metric,omitempty"`
+	Operator  string `json:"operator,omitempty"`
+	Period    int    `json:"period,omitempty"`
+	Value     string `json:"value,omitempty"`
 	Algorithm string `json:"algorithm,omitempty"`
 }
