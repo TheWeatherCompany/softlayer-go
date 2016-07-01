@@ -26,15 +26,18 @@ func (slsgs *softlayer_Scale_Group_Service) GetName() string {
 }
 
 func (slsgs *softlayer_Scale_Group_Service) CreateObject(template data_types.SoftLayer_Scale_Group) (data_types.SoftLayer_Scale_Group, error) {
-	// Replace the regionalGroup sub-structure with the regionalGroupId from a lookup
-	// This seems to have a higher success rate for this particular API
-	locationGroupRegionalId, err := common.GetLocationGroupRegional(slsgs.client, template.RegionalGroup.Name)
-	if err != nil {
-		return data_types.SoftLayer_Scale_Group{},
-			fmt.Errorf("Error while looking up regionalGroupId from name [%s]: %s", template.RegionalGroup.Name, err)
+
+	if template.RegionalGroup != nil && template.RegionalGroup.Name != "" {
+		// Replace the regionalGroup sub-structure with the regionalGroupId from a lookup
+		// This seems to have a higher success rate for this particular API
+		locationGroupRegionalId, err := common.GetLocationGroupRegional(slsgs.client, template.RegionalGroup.Name)
+		if err != nil {
+			return data_types.SoftLayer_Scale_Group{},
+				fmt.Errorf("Error while looking up regionalGroupId from name [%s]: %s", template.RegionalGroup.Name, err)
+		}
+		template.RegionalGroupId = locationGroupRegionalId.(int)
+		template.RegionalGroup = nil
 	}
-	template.RegionalGroupId = locationGroupRegionalId.(int)
-	template.RegionalGroup = nil
 
 	parameters := data_types.SoftLayer_Scale_Group_Parameters{
 		Parameters: []interface{}{
@@ -70,6 +73,79 @@ func (slsgs *softlayer_Scale_Group_Service) CreateObject(template data_types.Sof
 	}
 
 	return softLayer_Scale_Group, nil
+}
+
+func (slsgs *softlayer_Scale_Group_Service) GetObject(groupId int) (data_types.SoftLayer_Scale_Group, error) {
+	objectMask := []string{
+		"id",
+		"name",
+		"minimumMemberCount",
+		"maximumMemberCount",
+		"cooldown",
+		"regionalGroup.id",
+		"regionalGroup.name",
+		"terminationPolicy.keyName",
+		"virtualGuestMemberTemplate",
+		"loadBalancers.id",
+		"loadBalancers.port",
+		"loadBalancers.virtualServerId",
+		"loadBalancers.healthCheck.id",
+		"loadBalancers.healthCheck.healthCheckTypeId",
+		"loadBalancers.healthCheck.type.keyname",
+		"loadBalancers.healthCheck.attributes.value",
+		"loadBalancers.healthCheck.attributes.type.id",
+		"loadBalancers.healthCheck.attributes.type.keyname",
+	}
+
+	response, errorCode, err := slsgs.client.GetHttpClient().DoRawHttpRequestWithObjectMask(fmt.Sprintf("%s/%d/getObject.json", slsgs.GetName(), groupId), objectMask, "GET", new(bytes.Buffer))
+	if err != nil {
+		return data_types.SoftLayer_Scale_Group{}, err
+	}
+
+	if common.IsHttpErrorCode(errorCode) {
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Scale_Group#getObject, HTTP error code: '%d'", errorCode)
+		return data_types.SoftLayer_Scale_Group{}, errors.New(errorMessage)
+	}
+
+	log.Printf("[INFO]  ***** response json: %s", response)
+
+	group := data_types.SoftLayer_Scale_Group{}
+	err = json.Unmarshal(response, &group)
+	if err != nil {
+		return data_types.SoftLayer_Scale_Group{}, err
+	}
+
+	return group, nil
+}
+
+func (slsgs *softlayer_Scale_Group_Service) EditObject(groupId int, template data_types.SoftLayer_Scale_Group) (bool, error) {
+	parameters := data_types.SoftLayer_Scale_Group_Parameters{
+		Parameters: []interface{}{
+			template,
+		},
+	}
+
+	requestBody, err := json.Marshal(parameters)
+	log.Printf("[INFO]  ***** request body: %s", requestBody)
+	if err != nil {
+		return false, err
+	}
+
+	response, errorCode, err := slsgs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d/editObject.json", slsgs.GetName(), groupId), "POST", bytes.NewBuffer(requestBody))
+	if err != nil {
+		return false, err
+	}
+
+	if res := string(response[:]); res != "true" {
+		return false, errors.New(fmt.Sprintf("Failed to edit SoftLayer Scale Group with id: %d, got '%s' as response from the API.", groupId, res))
+	}
+
+	if common.IsHttpErrorCode(errorCode) {
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Scale_Group#editObject, HTTP error code: '%d'", errorCode)
+		return false, errors.New(errorMessage)
+	}
+
+	return true, err
 }
 
 func (slsgs *softlayer_Scale_Group_Service) ForceDeleteObject(group int) (bool, error) {
