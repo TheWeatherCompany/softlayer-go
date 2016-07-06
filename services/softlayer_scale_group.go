@@ -90,6 +90,8 @@ func (slsgs *softlayer_Scale_Group_Service) GetObject(groupId int) (data_types.S
 		"loadBalancers.port",
 		"loadBalancers.virtualServerId",
 		"loadBalancers.healthCheck.id",
+		"networkVlans.networkVlan.vlanNumber",
+		"networkVlans.networkVlan.primaryRouter.hostname",
 		"loadBalancers.healthCheck.healthCheckTypeId",
 		"loadBalancers.healthCheck.type.keyname",
 		"loadBalancers.healthCheck.attributes.value",
