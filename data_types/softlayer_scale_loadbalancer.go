@@ -1,5 +1,7 @@
 package data_types
 
+const HEALTH_CHECK_TYPE_HTTP_CUSTOM string = "HTTP-CUSTOM"
+
 type SoftLayer_Scale_LoadBalancer struct {
 	HealthCheck     *SoftLayer_Health_Check `json:"healthCheck,omitempty"`
 	Id              int                     `json:"id,omitempty"`
