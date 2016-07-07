@@ -11,7 +11,7 @@ type SoftLayer_Network_Vlan struct {
 	Name            string                     `json:"name,omitempty"`
 	NetworkVrfId    int                        `json:"networkVrfId,omitempty"`
 	Note            string                     `json:"note,omitempty"`
-	PrimaryRouter   *SoftLayer_Hardware_Router `json:primaryRouter,omitempty`
+	PrimaryRouter   *SoftLayer_Hardware_Router `json:"primaryRouter,omitempty"`
 	PrimarySubnetId int                        `json:"primarySubnetId,omitempty"`
 	VlanNumber      int                        `json:"vlanNumber,omitempty"`
 }
