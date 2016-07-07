@@ -75,6 +75,31 @@ func (slsgs *softlayer_Scale_Group_Service) CreateObject(template data_types.Sof
 	return softLayer_Scale_Group, nil
 }
 
+func (slsgs *softlayer_Scale_Group_Service) GetNetworkVlans(groupId int, objectMask []string, objectFilter string) ([]data_types.SoftLayer_Scale_Network_Vlan, error) {
+	path := fmt.Sprintf("%s/%d/%s", slsgs.GetName(), groupId, "getNetworkVlans.json")
+
+	responseBytes, errorCode, err := slsgs.client.GetHttpClient().DoRawHttpRequestWithObjectFilterAndObjectMask(path, objectMask, objectFilter, "GET", &bytes.Buffer{})
+	if err != nil {
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Scale_Group#getNetworkVlans, error message '%s'", err.Error())
+		return []data_types.SoftLayer_Scale_Network_Vlan{}, errors.New(errorMessage)
+	}
+
+	if common.IsHttpErrorCode(errorCode) {
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Scale_Group#getNetworkVlans, HTTP error code: '%d'", errorCode)
+		return []data_types.SoftLayer_Scale_Network_Vlan{}, errors.New(errorMessage)
+	}
+
+	vlans := []data_types.SoftLayer_Scale_Network_Vlan{}
+	err = json.Unmarshal(responseBytes, &vlans)
+	if err != nil {
+		errorMessage := fmt.Sprintf("softlayer-go: failed to decode JSON response, err message '%s'", err.Error())
+		err := errors.New(errorMessage)
+		return []data_types.SoftLayer_Scale_Network_Vlan{}, err
+	}
+
+	return vlans, nil
+}
+
 func (slsgs *softlayer_Scale_Group_Service) GetObject(groupId int) (data_types.SoftLayer_Scale_Group, error) {
 	objectMask := []string{
 		"id",
@@ -90,6 +115,7 @@ func (slsgs *softlayer_Scale_Group_Service) GetObject(groupId int) (data_types.S
 		"loadBalancers.port",
 		"loadBalancers.virtualServerId",
 		"loadBalancers.healthCheck.id",
+		"networkVlans.id",
 		"networkVlans.networkVlan.vlanNumber",
 		"networkVlans.networkVlan.primaryRouter.hostname",
 		"loadBalancers.healthCheck.healthCheckTypeId",
