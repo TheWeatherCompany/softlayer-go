@@ -87,6 +87,24 @@ func (slc *FakeSoftLayerClient) GetSoftLayer_Scale_Group_Service() (softlayer.So
 	return slService.(softlayer.SoftLayer_Scale_Group_Service), nil
 }
 
+func (slc *FakeSoftLayerClient) GetSoftLayer_Scale_Policy_Service() (softlayer.SoftLayer_Scale_Policy_Service, error) {
+	slService, err := slc.GetService("SoftLayer_Scale_Policy")
+	if err != nil {
+		return nil, err
+	}
+
+	return slService.(softlayer.SoftLayer_Scale_Policy_Service), nil
+}
+
+func (slc *FakeSoftLayerClient) GetSoftLayer_Scale_Policy_Trigger_Service() (softlayer.SoftLayer_Scale_Policy_Trigger_Service, error) {
+	slService, err := slc.GetService("SoftLayer_Scale_Policy_Trigger")
+	if err != nil {
+		return nil, err
+	}
+
+	return slService.(softlayer.SoftLayer_Scale_Policy_Trigger_Service), nil
+}
+
 func (fslc *FakeSoftLayerClient) GetSoftLayer_Virtual_Guest_Service() (softlayer.SoftLayer_Virtual_Guest_Service, error) {
 	slService, err := fslc.GetService("SoftLayer_Virtual_Guest")
 	if err != nil {
@@ -327,4 +345,6 @@ func (fslc *FakeSoftLayerClient) initSoftLayerServices() {
 	fslc.SoftLayerServices["SoftLayer_Network_Application_Delivery_Controller_Service"] = services.NewSoftLayer_Network_Application_Delivery_Controller_Service(fslc)
 	fslc.SoftLayerServices["SoftLayer_Dns_Domain_ResourceRecord"] = services.NewSoftLayer_Dns_Domain_ResourceRecord_Service(fslc)
 	fslc.SoftLayerServices["SoftLayer_Security_Certificate"] = services.NewSoftLayer_Security_Certificate_Service(fslc)
+	fslc.SoftLayerServices["SoftLayer_Scale_Group"] = services.NewSoftLayer_Scale_Group_Service(fslc)
+	fslc.SoftLayerServices["SoftLayer_Scale_Policy"] = services.NewSoftLayer_Scale_Policy_Service(fslc)
 }
