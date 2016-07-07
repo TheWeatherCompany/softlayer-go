@@ -1,0 +1,18 @@
+{
+    "name": "fake-name",
+    "regionalGroupId": 1234,
+    "minimumMemberCount": 1,
+    "maximumMemberCount": 10,
+    "cooldown": 30,
+    "virtualGuestMemberTemplate": {
+        "hostname": "fake-hostname",
+	"domain": "fake-domain",
+	"startCpus": 0,
+	"maxMemory": 0,
+	"datacenter": {
+	    "name": "fake-datacenter"
+	},
+	"hourlyBillingFlag": false,
+	"localDiskFlag": false
+    }
+}
