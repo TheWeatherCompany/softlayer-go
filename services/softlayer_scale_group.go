@@ -100,32 +100,13 @@ func (slsgs *softlayer_Scale_Group_Service) GetNetworkVlans(groupId int, objectM
 	return vlans, nil
 }
 
-func (slsgs *softlayer_Scale_Group_Service) GetObject(groupId int) (data_types.SoftLayer_Scale_Group, error) {
-	objectMask := []string{
-		"id",
-		"name",
-		"minimumMemberCount",
-		"maximumMemberCount",
-		"cooldown",
-		"regionalGroup.id",
-		"regionalGroup.name",
-		"terminationPolicy.keyName",
-		"virtualGuestMemberTemplate",
-		"loadBalancers.id",
-		"loadBalancers.port",
-		"loadBalancers.virtualServerId",
-		"loadBalancers.healthCheck.id",
-		"networkVlans.id",
-		"networkVlans.networkVlan.vlanNumber",
-		"networkVlans.networkVlan.primaryRouter.hostname",
-		"loadBalancers.healthCheck.healthCheckTypeId",
-		"loadBalancers.healthCheck.type.keyname",
-		"loadBalancers.healthCheck.attributes.value",
-		"loadBalancers.healthCheck.attributes.type.id",
-		"loadBalancers.healthCheck.attributes.type.keyname",
-	}
+func (slsgs *softlayer_Scale_Group_Service) GetObject(groupId int, objectMask []string) (data_types.SoftLayer_Scale_Group, error) {
 
-	response, errorCode, err := slsgs.client.GetHttpClient().DoRawHttpRequestWithObjectMask(fmt.Sprintf("%s/%d/getObject.json", slsgs.GetName(), groupId), objectMask, "GET", new(bytes.Buffer))
+	response, errorCode, err := slsgs.client.GetHttpClient().DoRawHttpRequestWithObjectMask(
+		fmt.Sprintf("%s/%d/getObject.json", slsgs.GetName(), groupId),
+		objectMask,
+		"GET",
+		new(bytes.Buffer))
 	if err != nil {
 		return data_types.SoftLayer_Scale_Group{}, err
 	}
