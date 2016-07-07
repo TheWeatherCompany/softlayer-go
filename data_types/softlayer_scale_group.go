@@ -18,6 +18,7 @@ type SoftLayer_Scale_Group struct {
 	SuspendedFlag              bool                                `json:"suspendedFlag"`
 	TerminationPolicy          *SoftLayer_Scale_Termination_Policy `json:"terminationPolicy,omitempty"`
 	VirtualGuestMemberTemplate SoftLayer_Virtual_Guest_Template    `json:"virtualGuestMemberTemplate,omitempty"`
+	Status                     *SoftLayer_Scale_Group_Status       `json:"status,omitempty"`
 }
 
 type SoftLayer_Scale_Termination_Policy struct {
