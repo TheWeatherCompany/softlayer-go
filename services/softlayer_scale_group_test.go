@@ -131,7 +131,7 @@ var _ = Describe("SoftLayer_Scale_Group_Service", func() {
 				errorCodes := []int{400, 401, 499}
 				for _, errorCode := range errorCodes {
 					fakeClient.FakeHttpClient.DoRawHttpRequestInt = errorCode
-					
+
 					mask := []string{"cooldown"}
 					_, err := scaleGroupService.GetObject(scaleGroup.Id, mask)
 					Expect(err).To(HaveOccurred())
@@ -142,7 +142,7 @@ var _ = Describe("SoftLayer_Scale_Group_Service", func() {
 				errorCodes := []int{500, 501, 599}
 				for _, errorCode := range errorCodes {
 					fakeClient.FakeHttpClient.DoRawHttpRequestInt = errorCode
-					
+
 					mask := []string{"cooldown"}
 					_, err := scaleGroupService.GetObject(scaleGroup.Id, mask)
 					Expect(err).To(HaveOccurred())
