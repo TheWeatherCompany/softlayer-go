@@ -3,10 +3,11 @@ package data_types
 import "time"
 
 const (
-	SOFTLAYER_SCALE_POLICY_TRIGGER_TYPE_ID_REPEATING = 2
-	SOFTLAYER_SCALE_POLICY_TRIGGER_TYPE_ID_ONE_TIME = 3
+	SOFTLAYER_SCALE_POLICY_TRIGGER_TYPE_ID_REPEATING    = 2
+	SOFTLAYER_SCALE_POLICY_TRIGGER_TYPE_ID_ONE_TIME     = 3
 	SOFTLAYER_SCALE_POLICY_TRIGGER_TYPE_ID_RESOURCE_USE = 1
 )
+
 type SoftLayer_Scale_Policy_Parameters struct {
 	Parameters []SoftLayer_Scale_Policy `json:"parameters"`
 }

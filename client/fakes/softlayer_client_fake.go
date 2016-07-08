@@ -88,12 +88,12 @@ func (slc *FakeSoftLayerClient) GetSoftLayer_Scale_Group_Service() (softlayer.So
 }
 
 func (slc *FakeSoftLayerClient) GetSoftLayer_Scale_Network_Vlan_Service() (softlayer.SoftLayer_Scale_Network_Vlan_Service, error) {
-        slService, err := slc.GetService("SoftLayer_Scale_Network_Vlan")
-        if err != nil {
-                return nil, err
-        }
+	slService, err := slc.GetService("SoftLayer_Scale_Network_Vlan")
+	if err != nil {
+		return nil, err
+	}
 
-        return slService.(softlayer.SoftLayer_Scale_Network_Vlan_Service), nil
+	return slService.(softlayer.SoftLayer_Scale_Network_Vlan_Service), nil
 }
 
 func (slc *FakeSoftLayerClient) GetSoftLayer_Scale_Policy_Service() (softlayer.SoftLayer_Scale_Policy_Service, error) {
