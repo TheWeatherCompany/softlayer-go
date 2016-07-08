@@ -117,7 +117,8 @@ var _ = Describe("SoftLayer_Scale_Group_Service", func() {
 		})
 
 		It("successfully retrieves an auto scale group", func() {
-			scaleGroup, err := scaleGroupService.GetObject(scaleGroup.Id)
+			mask := []string{"cooldown"}
+			scaleGroup, err := scaleGroupService.GetObject(scaleGroup.Id, mask)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(scaleGroup.Name).To(Equal("fake-name"))
 			Expect(scaleGroup.RegionalGroupId).To(Equal(1234))
@@ -130,8 +131,9 @@ var _ = Describe("SoftLayer_Scale_Group_Service", func() {
 				errorCodes := []int{400, 401, 499}
 				for _, errorCode := range errorCodes {
 					fakeClient.FakeHttpClient.DoRawHttpRequestInt = errorCode
-
-					_, err := scaleGroupService.GetObject(scaleGroup.Id)
+					
+					mask := []string{"cooldown"}
+					_, err := scaleGroupService.GetObject(scaleGroup.Id, mask)
 					Expect(err).To(HaveOccurred())
 				}
 			})
@@ -140,8 +142,9 @@ var _ = Describe("SoftLayer_Scale_Group_Service", func() {
 				errorCodes := []int{500, 501, 599}
 				for _, errorCode := range errorCodes {
 					fakeClient.FakeHttpClient.DoRawHttpRequestInt = errorCode
-
-					_, err := scaleGroupService.GetObject(scaleGroup.Id)
+					
+					mask := []string{"cooldown"}
+					_, err := scaleGroupService.GetObject(scaleGroup.Id, mask)
 					Expect(err).To(HaveOccurred())
 				}
 			})
