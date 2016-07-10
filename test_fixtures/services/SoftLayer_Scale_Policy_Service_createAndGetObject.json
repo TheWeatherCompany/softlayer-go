@@ -1,0 +1,10 @@
+{ 
+    "name": "fake-name", 
+    "cooldown": 30, 
+    "scaleGroupId": 1234567, 
+    "scaleActions": [{
+        "typeId": 1,
+        "amount": 1,
+        "scaleType": "RELATIVE" 
+    }]
+}
