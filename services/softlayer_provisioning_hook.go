@@ -139,6 +139,10 @@ func (slphs *softLayer_Provisioning_Hook_Service) EditObject(id int, template da
 func (slphs *softLayer_Provisioning_Hook_Service) DeleteObject(id int) (bool, error) {
 	response, errorCode, err := slphs.client.GetHttpClient().DoRawHttpRequest(fmt.Sprintf("%s/%d.json", slphs.GetName(), id), "DELETE", new(bytes.Buffer))
 
+	if err != nil {
+		return false, err
+	}
+
 	if res := string(response[:]); res != "true" {
 		return false, errors.New(fmt.Sprintf("Failed to delete Provisioning Hook with id '%d', got '%s' as a response from the SLAPI.", id, res))
 	}
@@ -146,10 +150,6 @@ func (slphs *softLayer_Provisioning_Hook_Service) DeleteObject(id int) (bool, er
 	if common.IsHttpErrorCode(errorCode) {
 		errorMessage := fmt.Sprintf("softlayer-go: could not remove SoftLayer_Provisioning_Hook with Id: %d, HTTP error code: '%d'", id, errorCode)
 		return false, errors.New(errorMessage)
-	}
-
-	if err != nil {
-		return false, err
 	}
 
 	return true, nil
