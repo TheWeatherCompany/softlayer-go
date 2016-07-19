@@ -213,6 +213,15 @@ func (fslc *FakeSoftLayerClient) GetSoftLayer_Security_Certificate_Service() (so
 	return slService.(softlayer.SoftLayer_Security_Certificate_Service), nil
 }
 
+func (fslc *FakeSoftLayerClient) GetSoftLayer_Provisioning_Hook_Service() (softlayer.SoftLayer_Provisioning_Hook_Service, error) {
+	slService, err := fslc.GetService("SoftLayer_Provisioning_Hook")
+	if err != nil {
+		return nil, err
+	}
+
+	return slService.(softlayer.SoftLayer_Provisioning_Hook_Service), nil
+}
+
 func (slc *FakeSoftLayerClient) GetSoftLayer_Load_Balancer_Service() (softlayer.SoftLayer_Load_Balancer_Service, error) {
 	slService, err := slc.GetService("SoftLayer_Load_Balancer_Service")
 	if err != nil {
