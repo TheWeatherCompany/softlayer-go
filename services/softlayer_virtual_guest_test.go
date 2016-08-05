@@ -167,6 +167,8 @@ var _ = Describe("SoftLayer_Virtual_Guest_Service", func() {
 			Expect(len(vg.OperatingSystem.Passwords)).To(BeNumerically(">=", 1))
 			Expect(vg.OperatingSystem.Passwords[0].Password).To(Equal("test_password"))
 			Expect(vg.OperatingSystem.Passwords[0].Username).To(Equal("test_username"))
+			Expect(vg.PrimaryNetworkComponent.PrimaryIpAddressRecord.GuestNetworkComponentBinding.IpAddressId).To(Equal(87654321))
+			Expect(vg.PrimaryBackendNetworkComponent.PrimaryIpAddressRecord.GuestNetworkComponentBinding.IpAddressId).To(Equal(8765432))
 		})
 
 		Context("when HTTP client returns error codes 40x or 50x", func() {

@@ -1,0 +1,47 @@
+{
+  "connectionLimit": 65000,
+  "id": 150585,
+  "ipAddressId": 28772116,
+  "securityCertificateId": null,
+  "sslEnabledFlag": true,
+  "highAvailabilityFlag": false,
+  "ipAddress": {
+    "ipAddress": "161.202.117.116"
+  },
+  "loadBalancerHardware": [
+    {
+      "accountId": 1,
+      "bareMetalInstanceFlag": 0,
+      "domain": "softlayer.com",
+      "fullyQualifiedDomainName": "lb05.tok02.softlayer.com",
+      "hardwareStatusId": 5,
+      "hostname": "lb05.tok02",
+      "id": 400712,
+      "notes": "",
+      "provisionDate": null,
+      "serviceProviderId": 1,
+      "serviceProviderResourceId": null,
+      "datacenter": {
+        "name": "ams01"
+      }
+    }
+  ],
+  "virtualServers": [
+    {
+      "allocation": 100,
+      "id": 264313,
+      "port": 82,
+      "routingMethodId": null,
+      "virtualIpAddressId": 150311,
+      "serviceGroups": [
+        {
+          "id": 260113,
+          "routingMethodId": 21,
+          "routingTypeId": 5,
+          "timeout": null,
+          "services": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+	"orderDate": "2016-06-21T16:08:31-05:00",
+	"orderDetails": {
+		"bigDataOrderFlag": false,
+		"billingInformation": {
+			"billingAddressLine1": "294 Route 100",
+			"billingCity": "Somers",
+			"billingCountryCode": "US",
+			"billingEmail": "sjang@us.ibm.com",
+			"billingNameCompany": "IBM (Soobaek Jang)",
+			"billingNameFirst": "Soobaek",
+			"billingNameLast": "Jang",
+			"billingPhoneVoice": "914-766-4287",
+			"billingPostalCode": "10589-3202",
+			"billingState": "NY",
+			"cardExpirationMonth": null,
+			"cardExpirationYear": null,
+			"taxExempt": 0
+		},
+		"billingOrderItemId": null,
+		"containerSplHash": "0000000032e6af9a00007f58e4b25d23",
+		"currencyShortName": "USD",
+		"extendedHardwareTesting": null,
+		"imageTemplateId": null,
+		"isManagedOrder": null,
+		"itemCategoryQuestionAnswers": [
+
+		],
+		"location": "449604",
+		"locationObject": {
+			"id": 449604,
+			"longName": "Tokyo 2",
+			"name": "tok02"
+		},
+		"message": "",
+		"packageId": 194,
+		"paymentType": "ADD_TO_BALANCE",
+		"postTaxRecurring": "959.37",
+		"postTaxRecurringHourly": "0",
+		"postTaxRecurringMonthly": "959.37",
+		"postTaxSetup": "0",
+		"preTaxRecurring": "959.37",
+		"preTaxRecurringHourly": "0",
+		"preTaxRecurringMonthly": "959.37",
+		"preTaxSetup": "0",
+		"presetId": null,
+		"prices": [
+			{
+				"id": 82329,
+				"itemId": 4136,
+				"laborFee": "0",
+				"oneTimeFee": "0",
+				"recurringFee": "959.37",
+				"setupFee": "0",
+				"categories": [
+					{
+						"categoryCode": "dedicated_load_balancer",
+						"id": 328,
+						"name": "Dedicated Load Balancer"
+					}
+				],
+				"item": {
+					"capacity": "65000",
+					"description": "Load Balancer (Dedicated, with SSL offload) - 15,000 Connections",
+					"id": 4136,
+					"keyName": "LOAD_BALANCER_DEDICATED_WITH_SSL_OFFLOAD_15000_CONNECTIONS",
+					"units": "N\/A",
+					"bundle": [
+
+					],
+					"thirdPartyPolicyAssignments": [
+
+					]
+				}
+			}
+		],
+		"primaryDiskPartitionId": null,
+		"privateCloudOrderFlag": false,
+		"properties": [
+
+		],
+		"proratedInitialCharge": "319.79",
+		"proratedOrderTotal": "319.79",
+		"quantity": 1,
+		"resourceGroupId": null,
+		"resourceGroupTemplateId": null,
+		"sendQuoteEmailFlag": null,
+		"serverCoreCount": null,
+		"sourceVirtualGuestId": null,
+		"sshKeys": [
+
+		],
+		"stepId": null,
+		"storageGroups": [
+
+		],
+		"taxCacheHash": "b4d0b6301977e25639ebac981fbd21d8e5576eff",
+		"taxCompletedFlag": true,
+		"totalRecurringTax": "0",
+		"totalSetupTax": "0",
+		"useHourlyPricing": false
+	},
+	"orderId": 9275147,
+	"placedOrder": {
+		"accountId": 736371,
+		"id": 9275147,
+		"orderQuoteId": null,
+		"orderTypeId": 4,
+		"presaleEventId": null,
+		"status": "PENDING_AUTO_APPROVAL",
+		"userRecordId": 619055,
+		"account": {
+			"brandId": 2101,
+			"companyName": "IBM (Soobaek Jang)",
+			"id": 736371
+		},
+		"items": [
+			{
+				"categoryCode": "dedicated_load_balancer",
+				"description": "Load Balancer (Dedicated, with SSL offload) - 15,000 Connections",
+				"id": 137574795,
+				"itemId": 4136,
+				"itemPriceId": "82329",
+				"laborFee": "0",
+				"oneTimeFee": "0",
+				"parentId": null,
+				"promoCodeId": null,
+				"recurringFee": "959.37",
+				"setupFee": "0",
+				"children": [
+
+				]
+			}
+		],
+		"userRecord": {
+			"accountId": 736371,
+			"firstName": "Tim",
+			"id": 619055,
+			"lastName": "Mulhern",
+			"username": "timtwc"
+		}
+	}
+}
