@@ -128,7 +128,7 @@ func (slpo *softLayer_Product_Order_Service) placeOrder(parameters interface{}) 
 	}
 
 	if common.IsHttpErrorCode(errorCode) {
-		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Product_Order#placeOrder, HTTP error code: '%d'", errorCode)
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Product_Order#placeOrder, HTTP error code: '%d', Response: '%s'", errorCode, responseBytes)
 		return datatypes.SoftLayer_Container_Product_Order_Receipt{}, errors.New(errorMessage)
 	}
 

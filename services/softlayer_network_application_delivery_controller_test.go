@@ -66,7 +66,23 @@ var _ = Describe("SoftLayer_Network_Application_Delivery_Controller_Service", fu
 				Version:  "10.1",
 				Plan:     "Standard",
 				IpCount:  2,
-				Location: "DALLAS06",
+				Location: "dal06",
+				Hardware: []datatypes.SoftLayer_Hardware_Template{
+					{
+						PrimaryNetworkComponent: &datatypes.SoftLayer_Network_Component{
+							NetworkVlanId: 1234567,
+							NetworkVlan: &datatypes.SoftLayer_Network_Vlan_Template{
+								PrimarySubnetId: 1234567,
+							},
+						},
+						PrimaryBackendNetworkComponent: &datatypes.SoftLayer_Network_Component{
+							NetworkVlanId: 7654321,
+							NetworkVlan: &datatypes.SoftLayer_Network_Vlan_Template{
+								PrimarySubnetId: 7654321,
+							},
+						},
+					},
+				},
 			}
 
 			result, err := nadcService.CreateNetscalerVPX(createOptions)
@@ -127,6 +143,10 @@ var _ = Describe("SoftLayer_Network_Application_Delivery_Controller_Service", fu
 			result, err := nadcService.GetObject(15293)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(result.Name).To(Equal("TWCADC795313-1"))
+			Expect(result.Subnets[0].IpAddresses[0].IpAddress).To(Equal("100.100.100.101"))
+			Expect(result.Subnets[0].IpAddresses[1].IpAddress).To(Equal("100.100.100.102"))
+			Expect(result.NetworkVlans[0].PrimaryRouter.Hostname).To(Equal("bcr01a.dal06"))
+			Expect(result.NetworkVlans[1].PrimaryRouter.Hostname).To(Equal("fcr01a.dal06"))
 		})
 	})
 

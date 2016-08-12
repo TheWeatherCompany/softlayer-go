@@ -58,6 +58,7 @@ func (slnadcs *softLayer_Network_Application_Delivery_Controller_Service) Create
 		Location:    createOptions.Location,
 		Prices:      items,
 		Quantity:    1,
+		Hardware:    createOptions.Hardware,
 	}
 
 	receipt, err := orderService.PlaceContainerOrderApplicationDeliveryController(order)
@@ -372,9 +373,10 @@ func (slnadcs *softLayer_Network_Application_Delivery_Controller_Service) GetObj
 		"licenseExpirationDate",
 		"networkVlan",
 		"networkVlanCount",
-		"networkVlans",
+		"networkVlans.primaryRouter",
+		"networkVlans.primarySubnets",
 		"subnetCount",
-		"subnets",
+		"subnets.ipAddresses",
 		"tagReferenceCount",
 		"tagReferences",
 		"type",
@@ -525,7 +527,7 @@ func (slnadcs *softLayer_Network_Application_Delivery_Controller_Service) checkC
 	}
 
 	if createOptions.Location == "" {
-		errorMessages = append(errorMessages, fmt.Sprintf(errorTemplate, "Location"))
+		errorMessages = append(errorMessages, fmt.Sprintf(errorTemplate, "datacenter"))
 	}
 
 	if len(errorMessages) > 0 {

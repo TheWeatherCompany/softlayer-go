@@ -273,6 +273,15 @@ func (slc *SoftLayerClient) GetSoftLayer_Provisioning_Hook_Service() (softlayer.
 	return slService.(softlayer.SoftLayer_Provisioning_Hook_Service), nil
 }
 
+func (slc *SoftLayerClient) GetSoftLayer_Location_Datacenter_Service() (softlayer.SoftLayer_Location_Datacenter_Service, error) {
+	slService, err := slc.GetService("SoftLayer_Location_Datacenter_Service")
+	if err != nil {
+		return nil, err
+	}
+
+	return slService.(softlayer.SoftLayer_Location_Datacenter_Service), nil
+}
+
 //Public methods
 
 func (slc *SoftLayerClient) DoRawHttpRequestWithObjectMask(path string, masks []string, requestType string, requestBody *bytes.Buffer) ([]byte, error) {
@@ -346,6 +355,7 @@ func (slc *SoftLayerClient) initSoftLayerServices() {
 	slc.softLayerServices["SoftLayer_Load_Balancer_Service"] = services.NewSoftLayer_Load_Balancer(slc)
 	slc.softLayerServices["SoftLayer_Load_Balancer_Service_Group"] = services.NewSoftLayer_Load_Balancer_Service_Group_Service(slc)
 	slc.softLayerServices["SoftLayer_Provisioning_Hook"] = services.NewSoftLayer_Provisioning_Hook_Service(slc)
+	slc.softLayerServices["SoftLayer_Location_Datacenter_Service"] = services.NewSoftLayer_Location_Datacenter_Service(slc)
 }
 
 func (slc *SoftLayerClient) makeHttpRequest(url string, requestType string, requestBody *bytes.Buffer) ([]byte, error) {

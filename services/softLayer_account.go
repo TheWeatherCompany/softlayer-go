@@ -193,6 +193,31 @@ func (slas *softLayer_Account_Service) GetNetworkVlans(objectMask []string, obje
 	return vlans, nil
 }
 
+func (slas *softLayer_Account_Service) GetSubnets(objectMask []string, objectFilter string) ([]datatypes.SoftLayer_Network_Subnet, error) {
+	path := fmt.Sprintf("%s/%s", slas.GetName(), "getSubnets.json")
+
+	responseBytes, errorCode, err := slas.client.GetHttpClient().DoRawHttpRequestWithObjectFilterAndObjectMask(path, objectMask, objectFilter, "GET", &bytes.Buffer{})
+	if err != nil {
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Account#getSubnets, error message '%s'  %s", err.Error(), responseBytes)
+		return []datatypes.SoftLayer_Network_Subnet{}, errors.New(errorMessage)
+	}
+
+	if common.IsHttpErrorCode(errorCode) {
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Account#getSubnets, HTTP error code: '%d', response: '%s'", errorCode, responseBytes)
+		return []datatypes.SoftLayer_Network_Subnet{}, errors.New(errorMessage)
+	}
+
+	subnets := []datatypes.SoftLayer_Network_Subnet{}
+	err = json.Unmarshal(responseBytes, &subnets)
+	if err != nil {
+		errorMessage := fmt.Sprintf("softlayer-go: failed to decode JSON response, err message '%s'", err.Error())
+		err := errors.New(errorMessage)
+		return []datatypes.SoftLayer_Network_Subnet{}, err
+	}
+
+	return subnets, nil
+}
+
 func (slas *softLayer_Account_Service) GetNetworkStorage() ([]datatypes.SoftLayer_Network_Storage, error) {
 	path := fmt.Sprintf("%s/%s", slas.GetName(), "getNetworkStorage.json")
 	responseBytes, errorCode, err := slas.client.GetHttpClient().DoRawHttpRequest(path, "GET", &bytes.Buffer{})

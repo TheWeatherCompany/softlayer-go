@@ -16,7 +16,9 @@ type SoftLayer_Hardware_Template struct {
 	HourlyBillingFlag            bool   `json:"hourlyBillingFlag"`
 	OperatingSystemReferenceCode string `json:"operatingSystemReferenceCode"`
 
-	Datacenter *Datacenter `json:"datacenter"`
+	Datacenter                     *Datacenter                  `json:"datacenter"`
+	PrimaryNetworkComponent        *SoftLayer_Network_Component `json:"primaryNetworkComponent,omitempty"`
+	PrimaryBackendNetworkComponent *SoftLayer_Network_Component `json:"primaryBackendNetworkComponent,omitempty"`
 }
 
 type SoftLayer_Hardware struct {

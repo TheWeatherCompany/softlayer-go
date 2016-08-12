@@ -20,5 +20,29 @@
   "type": {
     "keyName": "NETSCALER_VPX",
     "name": "NetScaler VPX"
-  }
+  },
+  "subnets": [
+    {
+      "ipAddresses": [
+        {
+          "ipAddress": "100.100.100.101"
+        },
+        {
+          "ipAddress": "100.100.100.102"
+        }
+      ]
+    }
+  ],
+  "networkVlans" : [
+    {
+      "primaryRouter": {
+        "hostname": "bcr01a.dal06"
+      }
+    },
+    {
+      "primaryRouter": {
+        "hostname": "fcr01a.dal06"
+      }
+    }
+  ]
 }

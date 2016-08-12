@@ -67,6 +67,7 @@ type SoftLayer_Container_Product_Order_Network_Application_Delivery_Controller s
 	Prices      []SoftLayer_Product_Item_Price `json:"prices,omitempty"`
 	Properties  []Property                     `json:"properties,omitempty"`
 	Quantity    int                            `json:"quantity,omitempty"`
+	Hardware    []SoftLayer_Hardware_Template  `json:"hardware,omitempty"`
 }
 
 type SoftLayer_Container_Product_Order_Load_Balancer struct {

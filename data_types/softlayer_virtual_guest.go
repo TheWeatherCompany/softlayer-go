@@ -155,6 +155,7 @@ type Image_Template_Config struct {
 
 type SoftLayer_Network_Subnet_IpAddress struct {
 	GuestNetworkComponentBinding *SoftLayer_Virtual_Guest_Network_Component_IpAddress `json:"guestNetworkComponentBinding,omitempty"`
+	IpAddress                    string                                               `json:"ipAddress,omitempty"`
 }
 
 type SoftLayer_Virtual_Guest_Network_Component_IpAddress struct {

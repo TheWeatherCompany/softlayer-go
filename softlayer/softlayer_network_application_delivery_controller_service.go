@@ -10,6 +10,7 @@ type NetworkApplicationDeliveryControllerCreateOptions struct {
 	Plan     string
 	IpCount  int
 	Location string
+	Hardware []datatypes.SoftLayer_Hardware_Template
 }
 
 type SoftLayer_Network_Application_Delivery_Controller_Service interface {

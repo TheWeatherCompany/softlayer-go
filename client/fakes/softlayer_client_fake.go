@@ -276,6 +276,15 @@ func (fslc *FakeSoftLayerClient) GetSoftLayer_Provisioning_Hook_Service() (softl
 	return slService.(softlayer.SoftLayer_Provisioning_Hook_Service), nil
 }
 
+func (slc *FakeSoftLayerClient) GetSoftLayer_Location_Datacenter_Service() (softlayer.SoftLayer_Location_Datacenter_Service, error) {
+	slService, err := slc.GetService("SoftLayer_Location_Datacenter_Service")
+	if err != nil {
+		return nil, err
+	}
+
+	return slService.(softlayer.SoftLayer_Location_Datacenter_Service), nil
+}
+
 //Public methods
 func (fslc *FakeSoftLayerClient) DoRawHttpRequestWithObjectMask(path string, masks []string, requestType string, requestBody *bytes.Buffer) ([]byte, error) {
 	fslc.DoRawHttpRequestPath = path
