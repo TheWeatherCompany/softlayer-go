@@ -48,7 +48,7 @@ func (slsps *softlayer_Scale_Policy_Service) CreateObject(template datatypes.Sof
 	}
 
 	if common.IsHttpErrorCode(errorCode) {
-		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Scale_Policy#createObject1, HTTP error code: 'Request : %d'"+string(requestBody)+"Resonse : "+string(response), errorCode)
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Scale_Policy#createObject1, HTTP error code: 'Request : %d'"+string(requestBody) + "Resonse : " + string(response), errorCode)
 		return datatypes.SoftLayer_Scale_Policy{}, errors.New(errorMessage)
 	}
 
