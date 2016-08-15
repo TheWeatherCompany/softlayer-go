@@ -73,10 +73,10 @@ var _ = Describe("SoftLayer_Scale_Policy_Service", func() {
 			},
 			Triggers: []datatypes.SoftLayer_Scale_Policy_Trigger{
 				{
-					Id: 1,
+					Id:     1,
 					TypeId: 1,
 				},
-			},	
+			},
 		}
 		scalePolicy, err = scalePolicyService.CreateObject(scalePolicyTemplate)
 		Expect(scalePolicy.Id).NotTo(BeNil())
@@ -104,10 +104,10 @@ var _ = Describe("SoftLayer_Scale_Policy_Service", func() {
 					},
 					Triggers: []datatypes.SoftLayer_Scale_Policy_Trigger{
 						{
-							Id: 1,
+							Id:     1,
 							TypeId: 1,
 						},
-					},	
+					},
 				}
 			}
 		})
@@ -130,10 +130,10 @@ var _ = Describe("SoftLayer_Scale_Policy_Service", func() {
 					},
 					Triggers: []datatypes.SoftLayer_Scale_Policy_Trigger{
 						{
-							Id: 1,
+							Id:     1,
 							TypeId: 1,
 						},
-					},	
+					},
 				}
 			}
 		})
