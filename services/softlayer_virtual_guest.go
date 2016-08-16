@@ -62,7 +62,7 @@ func (slvgs *softLayer_Virtual_Guest_Service) CreateObject(template datatypes.So
 	}
 
 	if common.IsHttpErrorCode(errorCode) {
-		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Virtual_Guest#createObject, HTTP error code: '%d'", errorCode)
+		errorMessage := fmt.Sprintf("softlayer-go: could not SoftLayer_Virtual_Guest#createObject, HTTP error code: '%d' Response: '%s'", errorCode, response)
 		return datatypes.SoftLayer_Virtual_Guest{}, errors.New(errorMessage)
 	}
 
@@ -153,8 +153,14 @@ func (slvgs *softLayer_Virtual_Guest_Service) GetObject(instanceId int) (datatyp
 		"blockDeviceTemplateGroup.globalIdentifier",
 		"primaryNetworkComponent.networkVlan.id",
 		"primaryNetworkComponent.primaryIpAddressRecord.guestNetworkComponentBinding.ipAddressId",
+		"primaryNetworkComponent.networkVlan.primaryRouter",
+		"primaryNetworkComponent.networkVlan.primarySubnets",
+		"primaryNetworkComponent.networkVlan.vlanNumber",
 		"primaryBackendNetworkComponent.networkVlan.id",
 		"primaryBackendNetworkComponent.primaryIpAddressRecord.guestNetworkComponentBinding.ipAddressId",
+		"primaryBackendNetworkComponent.networkVlan.primaryRouter",
+		"primaryBackendNetworkComponent.networkVlan.primarySubnets",
+		"primaryBackendNetworkComponent.networkVlan.vlanNumber",
 	}
 
 	response, errorCode, err := slvgs.client.GetHttpClient().DoRawHttpRequestWithObjectMask(fmt.Sprintf("%s/%d/getObject.json", slvgs.GetName(), instanceId), objectMask, "GET", new(bytes.Buffer))
@@ -172,7 +178,6 @@ func (slvgs *softLayer_Virtual_Guest_Service) GetObject(instanceId int) (datatyp
 	if err != nil {
 		return datatypes.SoftLayer_Virtual_Guest{}, err
 	}
-
 	return virtualGuest, nil
 }
 
