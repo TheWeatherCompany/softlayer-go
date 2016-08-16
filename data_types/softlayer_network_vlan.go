@@ -26,4 +26,6 @@ type SoftLayer_Network_Vlan_Template struct {
 	Note            string     `json:"note,omitempty"`
 	PrimarySubnetId int        `json:"primarySubnetId,omitempty"`
 	VlanNumber      int        `json:"vlanNumber,omitempty"`
+	PrimaryRouter   *SoftLayer_Hardware_Router `json:"primaryRouter,omitempty"`
+	PrimarySubnets  []SoftLayer_Network_Subnet `json:"primarySubnets,omitempty"`
 }
