@@ -26,6 +26,5 @@ type SoftLayer_Account_Service interface {
 	GetHardware() ([]datatypes.SoftLayer_Hardware, error)
 	GetApplicationDeliveryControllersWithFilter(filter string) ([]datatypes.SoftLayer_Network_Application_Delivery_Controller, error)
 	GetApplicationDeliveryControllerLoadBalancersWithFilterAndMask(filter string, mask string) ([]datatypes.SoftLayer_Load_Balancer, error)
-	GetNetworkVlans(objectMask []string, objectFilter string) ([]datatypes.SoftLayer_Network_Vlan, error)
 	GetSubnets(objectMask []string, objectFilter string) ([]datatypes.SoftLayer_Network_Subnet, error)
 }
