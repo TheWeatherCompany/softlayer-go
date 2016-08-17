@@ -37,8 +37,8 @@ type SoftLayer_Virtual_Guest struct {
 	PrimaryBackendIpAddress string `json:"primaryBackendIpAddress,omitempty"`
 	PrimaryIpAddress        string `json:"primaryIpAddress,omitempty"`
 
-	PrimaryNetworkComponent        *SoftLayer_Network_Component   `json:"primaryNetworkComponent,omitempty"`
-	PrimaryBackendNetworkComponent *SoftLayer_Network_Component   `json:"primaryBackendNetworkComponent,omitempty"`
+	PrimaryNetworkComponent        *SoftLayer_Network_Component `json:"primaryNetworkComponent,omitempty"`
+	PrimaryBackendNetworkComponent *SoftLayer_Network_Component `json:"primaryBackendNetworkComponent,omitempty"`
 
 	Location          *SoftLayer_Location `json:"location"`
 	Datacenter        *SoftLayer_Location `json:"datacenter"`
@@ -78,12 +78,12 @@ type SoftLayer_Virtual_Guest_Template struct {
 	BlockDeviceTemplateGroup     *BlockDeviceTemplateGroup `json:"blockDeviceTemplateGroup,omitempty"`
 
 	//Optional
-	DedicatedAccountHostOnlyFlag   bool                            `json:"dedicatedAccountHostOnlyFlag,omitempty"`
-	NetworkComponents              []NetworkComponents             `json:"networkComponents,omitempty"`
-	PrivateNetworkOnlyFlag         bool                            `json:"privateNetworkOnlyFlag,omitempty"`
-	PrimaryNetworkComponent        *SoftLayer_Network_Component    `json:"primaryNetworkComponent,omitempty"`
-	PrimaryBackendNetworkComponent *SoftLayer_Network_Component    `json:"primaryBackendNetworkComponent,omitempty"`
-	PostInstallScriptUri           string                          `json:"postInstallScriptUri,omitempty"`
+	DedicatedAccountHostOnlyFlag   bool                         `json:"dedicatedAccountHostOnlyFlag,omitempty"`
+	NetworkComponents              []NetworkComponents          `json:"networkComponents,omitempty"`
+	PrivateNetworkOnlyFlag         bool                         `json:"privateNetworkOnlyFlag,omitempty"`
+	PrimaryNetworkComponent        *SoftLayer_Network_Component `json:"primaryNetworkComponent,omitempty"`
+	PrimaryBackendNetworkComponent *SoftLayer_Network_Component `json:"primaryBackendNetworkComponent,omitempty"`
+	PostInstallScriptUri           string                       `json:"postInstallScriptUri,omitempty"`
 
 	BlockDevices []BlockDevice `json:"blockDevices,omitempty"`
 	UserData     []UserData    `json:"userData,omitempty"`
